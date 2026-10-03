@@ -139,7 +139,7 @@ export default function OnboardingPage() {
                       }`}
                     >
                       <div className="text-lg font-bold text-gray-800">{lang.native}</div>
-                      <div className="text-xs text-gray-500">{lang.name}</div>
+                      <div className="text-xs text-gray-500">{t(lang.name)}</div>
                     </button>
                   ))}
                 </div>
@@ -147,7 +147,7 @@ export default function OnboardingPage() {
               
               <div className="pt-8">
                 <button onClick={loadDemo} className="text-sm text-[#2E7D32] font-medium hover:underline">
-                  {t('Explore Demo Farm instead')}
+                  {t.exploreDemoFarm}
                 </button>
               </div>
             </div>
@@ -178,9 +178,9 @@ export default function OnboardingPage() {
                       value={formData.state}
                       onChange={e => setFormData({...formData, state: e.target.value})}
                     >
-                      <option value="Telangana">తెలంగాణ</option>
-                      <option value="Andhra Pradesh">ఆంధ్రప్రదేశ్</option>
-                      <option value="Maharashtra">మహారాష్ట్ర</option>
+                      <option value="Telangana">{t('Telangana')}</option>
+                      <option value="Andhra Pradesh">{t('Andhra Pradesh')}</option>
+                      <option value="Maharashtra">{t('Maharashtra')}</option>
                     </select>
                   </div>
                   <div className="space-y-1">
@@ -190,9 +190,9 @@ export default function OnboardingPage() {
                       value={formData.district}
                       onChange={e => setFormData({...formData, district: e.target.value})}
                     >
-                      <option value="Warangal">వరంగల్</option>
-                      <option value="Karimnagar">కరీంనగర్</option>
-                      <option value="Khammam">ఖమ్మం</option>
+                      <option value="Warangal">{t('Warangal')}</option>
+                      <option value="Karimnagar">{t('Karimnagar')}</option>
+                      <option value="Khammam">{t('Khammam')}</option>
                     </select>
                   </div>
                   <div className="space-y-1">
@@ -273,12 +273,12 @@ export default function OnboardingPage() {
                     value={formData.soilType}
                     onChange={e => setFormData({...formData, soilType: e.target.value})}
                   >
-                    <option value="Red soil">ఎర్ర నేల</option>
-                    <option value="Black soil">నల్ల నేల</option>
-                    <option value="Alluvial">ఒండ్రు నేల</option>
-                    <option value="Sandy">ఇసుక నేల</option>
-                    <option value="Clayey">బంకమట్టి నేల</option>
-                    <option value="Loamy">లోమీ నేల</option>
+                    <option value="Red soil">{t('Red soil')}</option>
+                    <option value="Black soil">{t('Black soil')}</option>
+                    <option value="Alluvial">{t('Alluvial')}</option>
+                    <option value="Sandy">{t('Sandy')}</option>
+                    <option value="Clayey">{t('Clayey')}</option>
+                    <option value="Loamy">{t('Loamy')}</option>
                   </select>
                 </div>
 
@@ -289,11 +289,11 @@ export default function OnboardingPage() {
                     value={formData.irrigation}
                     onChange={e => setFormData({...formData, irrigation: e.target.value})}
                   >
-                    <option value="Borewell">బోరు బావి</option>
-                    <option value="Canal">కాలువ</option>
-                    <option value="Drip">బిందు సేద్యం</option>
-                    <option value="Rain-fed">వర్షాధారం</option>
-                    <option value="Sprinkler">తుంపర సేద్యం</option>
+                    <option value="Borewell">{t('Borewell')}</option>
+                    <option value="Canal">{t('Canal')}</option>
+                    <option value="Drip">{t('Drip')}</option>
+                    <option value="Rain-fed">{t('Rain-fed')}</option>
+                    <option value="Sprinkler">{t('Sprinkler')}</option>
                   </select>
                 </div>
               </div>
