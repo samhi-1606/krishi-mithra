@@ -4,7 +4,7 @@ import { SeedVariety, SoilAnalysis, FertilizerRec, PestControlRec } from '../typ
 export const farmInputService = {
   getSeeds: async (crop: string, region: string, season: string, soil: string): Promise<SeedVariety[]> => {
     try {
-      return await api.get<SeedVariety[]>(`/inputs/seeds?crop=${crop}&region=${region}&season=${season}&soil=${soil}`);
+      return await api.get<SeedVariety[]>(`/farm-inputs/seeds?crop=${crop}&region=${region}&season=${season}&soil=${soil}`);
     } catch (error) {
       console.warn('Failed to fetch seeds, using fallback data', error);
       return [
@@ -16,7 +16,7 @@ export const farmInputService = {
 
   analyzeSoil: async (data: any): Promise<SoilAnalysis> => {
     try {
-      return await api.post<SoilAnalysis>(`/inputs/soil-analyze`, data);
+      return await api.post<SoilAnalysis>(`/farm-inputs/soil-analysis`, data);
     } catch (error) {
       console.warn('Failed to analyze soil, using fallback data', error);
       return { ph: 6.5, nitrogen: 280, phosphorus: 22, potassium: 180, organicCarbon: 0.6, moisture: 45, status: 'good' };
@@ -25,7 +25,7 @@ export const farmInputService = {
 
   getFertilizer: async (crop: string, soilType: string): Promise<FertilizerRec[]> => {
     try {
-      return await api.get<FertilizerRec[]>(`/inputs/fertilizers?crop=${crop}&soilType=${soilType}`);
+      return await api.get<FertilizerRec[]>(`/farm-inputs/fertilizer?crop=${crop}&soil_type=${soilType}`);
     } catch (error) {
       console.warn('Failed to fetch fertilizers, using fallback data', error);
       return [
@@ -38,7 +38,7 @@ export const farmInputService = {
 
   getPestControl: async (crop: string): Promise<PestControlRec[]> => {
     try {
-      return await api.get<PestControlRec[]>(`/inputs/pest-control?crop=${crop}`);
+      return await api.get<PestControlRec[]>(`/farm-inputs/pest-control?crop=${crop}`);
     } catch (error) {
       console.warn('Failed to fetch pest control, using fallback data', error);
       return [

@@ -11,6 +11,13 @@ interface Message {
   timestamp: Date;
 }
 
+interface BhumiContext {
+  location: string;
+  crops: string[];
+  farmArea: number;
+  irrigation: string;
+}
+
 const SUGGESTED_QUESTIONS = [
   "Will rain affect my rice crop?",
   "What is wrong with my crop?",
@@ -21,7 +28,7 @@ const SUGGESTED_QUESTIONS = [
 
 // Mock Bhumi Service for offline fallback
 const bhumiService = {
-  async chat(message: string, context: any) {
+  async chat(message: string, context: BhumiContext) {
     const msg = message.toLowerCase();
     
     // Simulate network delay
@@ -79,11 +86,10 @@ export default function BhumiPage() {
 
     try {
       const response = await bhumiService.chat(text, {
-        name: farmer?.name || 'Farmer',
-        location: farmer?.locationName || 'Warangal',
-        crops: farmer?.crops || ['Rice'],
-        farmArea: farmer?.farmArea || 5,
-        irrigation: farmer?.irrigation || 'Borewell'
+        location: farmer?.location.address || 'Warangal',
+        crops: farmer ? [farmer.farmDetails.primaryCrop] : ['Rice'],
+        farmArea: farmer?.farmDetails.area || 5,
+        irrigation: farmer?.farmDetails.irrigationType || 'Borewell'
       });
 
       const bhumiMsg: Message = {
@@ -113,13 +119,13 @@ export default function BhumiPage() {
         {/* Context Pills */}
         <div className="flex gap-2 mt-3 overflow-x-auto max-w-full pb-1 scrollbar-hide">
           <span className="flex items-center gap-1 bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-medium border border-green-200">
-            <MapPin className="w-3 h-3" /> {farmer?.locationName || 'Warangal'}
+            <MapPin className="w-3 h-3" /> {farmer?.location.address || 'Warangal'}
           </span>
           <span className="flex items-center gap-1 bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full text-xs font-medium border border-yellow-200">
-            <Sprout className="w-3 h-3" /> {farmer?.crops?.[0] || 'Rice'}
+            <Sprout className="w-3 h-3" /> {farmer?.farmDetails.primaryCrop || 'Rice'}
           </span>
           <span className="flex items-center gap-1 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-medium border border-blue-200">
-            <TestTube className="w-3 h-3" /> {farmer?.irrigation || 'Borewell'}
+            <TestTube className="w-3 h-3" /> {farmer?.farmDetails.irrigationType || 'Borewell'}
           </span>
         </div>
       </div>

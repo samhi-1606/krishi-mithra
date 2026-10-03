@@ -27,25 +27,25 @@ export default function FarmIntelligencePage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div onClick={() => navigate('/farm-intelligence/satellite')} className="card p-6 bg-white rounded-lg shadow border cursor-pointer hover:border-[#2E7D32] transition-colors flex flex-col items-center text-center gap-3">
+        <div onClick={() => navigate('/farm/satellite')} className="card p-6 bg-white rounded-lg shadow border cursor-pointer hover:border-[#2E7D32] transition-colors flex flex-col items-center text-center gap-3">
           <div className="bg-blue-100 p-4 rounded-full"><Satellite size={32} className="text-blue-600" /></div>
           <h3 className="font-bold text-lg">Satellite Monitoring</h3>
           <p className="text-sm text-gray-600">Macro-level crop health analysis using NDVI imaging.</p>
         </div>
 
-        <div onClick={() => navigate('/farm-intelligence/drone')} className="card p-6 bg-white rounded-lg shadow border cursor-pointer hover:border-[#2E7D32] transition-colors flex flex-col items-center text-center gap-3">
+        <div onClick={() => navigate('/farm/drone')} className="card p-6 bg-white rounded-lg shadow border cursor-pointer hover:border-[#2E7D32] transition-colors flex flex-col items-center text-center gap-3">
           <div className="bg-purple-100 p-4 rounded-full"><Plane size={32} className="text-purple-600" /></div>
           <h3 className="font-bold text-lg">Drone Scan</h3>
           <p className="text-sm text-gray-600">High-resolution aerial imagery for precise issue detection.</p>
         </div>
 
-        <div onClick={() => navigate('/farm-intelligence/crop-scan')} className="card p-6 bg-white rounded-lg shadow border cursor-pointer hover:border-[#2E7D32] transition-colors flex flex-col items-center text-center gap-3">
+        <div onClick={() => navigate('/farm/crop-scan')} className="card p-6 bg-white rounded-lg shadow border cursor-pointer hover:border-[#2E7D32] transition-colors flex flex-col items-center text-center gap-3">
           <div className="bg-orange-100 p-4 rounded-full"><Scan size={32} className="text-orange-600" /></div>
           <h3 className="font-bold text-lg">Crop Image Scanner</h3>
           <p className="text-sm text-gray-600">Take a photo of a leaf to instantly identify diseases.</p>
         </div>
 
-        <div onClick={() => navigate('/farm-intelligence/cameras')} className="card p-6 bg-white rounded-lg shadow border cursor-pointer hover:border-[#2E7D32] transition-colors flex flex-col items-center text-center gap-3">
+        <div onClick={() => navigate('/farm/cameras')} className="card p-6 bg-white rounded-lg shadow border cursor-pointer hover:border-[#2E7D32] transition-colors flex flex-col items-center text-center gap-3">
           <div className="bg-teal-100 p-4 rounded-full"><Camera size={32} className="text-teal-600" /></div>
           <h3 className="font-bold text-lg">Field CCTV</h3>
           <p className="text-sm text-gray-600">24/7 monitoring of your fields via installed cameras.</p>

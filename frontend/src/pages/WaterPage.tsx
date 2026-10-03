@@ -44,7 +44,7 @@ export default function WaterPage() {
   const [simulationState, setSimulationState] = useState<'normal' | 'dam' | 'river' | 'risk' | 'farm' | 'completed'>('normal');
 
   const farmLat = farmer?.location?.lat || 17.97;
-  const farmLng = farmer?.location?.lng || 79.59;
+  const farmLng = farmer?.location?.lon || 79.59;
 
   const handleSimulate = () => {
     setSimulationState('dam');
@@ -54,12 +54,10 @@ export default function WaterPage() {
     setTimeout(() => {
       setSimulationState('completed');
       addAlert({
-        id: Date.now().toString(),
         title: '🚨 Potential Downstream Water Risk',
         message: 'Upstream water release detected. Your registered farm is inside the monitored downstream region. Risk: MODERATE',
-        type: 'danger',
-        timestamp: new Date().toISOString(),
-        read: false
+        type: 'water',
+        severity: 'warning'
       });
     }, 6000);
   };
@@ -236,8 +234,8 @@ export default function WaterPage() {
           <Marker position={[farmLat, farmLng]} icon={createIcon('#2E7D32', '🌾')}>
             <Popup>
               <div className="font-bold text-gray-900">{farmer?.name || 'Your Farm'}</div>
-              <div className="text-sm text-gray-600">{farmer?.crops?.join(', ') || 'Mixed Crops'}</div>
-              <div className="text-xs text-gray-500 mt-1">{farmer?.farmArea ? `${farmer.farmArea} acres` : 'Area not specified'}</div>
+              <div className="text-sm text-gray-600">{farmer?.farmDetails.primaryCrop || 'Mixed Crops'}</div>
+              <div className="text-xs text-gray-500 mt-1">{farmer?.farmDetails.area ? `${farmer.farmDetails.area} acres` : 'Area not specified'}</div>
             </Popup>
           </Marker>
 

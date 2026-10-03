@@ -12,7 +12,7 @@ export const marketService = {
         if (filters.market) params.append('market', filters.market);
         query = `?${params.toString()}`;
       }
-      return await api.get<MarketPrice[]>(`/market/prices${query}`);
+      return await api.get<MarketPrice[]>(`/market-prices/${query}`);
     } catch (error) {
       console.warn('Failed to fetch market prices, using demo data', error);
       let prices = [...demoMarketPrices];
@@ -24,7 +24,7 @@ export const marketService = {
 
   getMarketTrends: async (crop: string, market: string): Promise<TrendData[]> => {
     try {
-      return await api.get<TrendData[]>(`/market/trends?crop=${crop}&market=${market}`);
+      return await api.get<TrendData[]>(`/market-prices/trends?crop=${crop}&market=${market}`);
     } catch (error) {
       console.warn('Failed to fetch market trends, generating demo data', error);
       return Array.from({ length: 7 }).map((_, i) => ({
@@ -36,7 +36,7 @@ export const marketService = {
 
   getBestNearbyPrice: async (crop: string, lat: number, lon: number): Promise<BestPrice> => {
     try {
-      return await api.get<BestPrice>(`/market/best-price?crop=${crop}&lat=${lat}&lon=${lon}`);
+      return await api.get<BestPrice>(`/market-prices/best?crop=${crop}&lat=${lat}&lon=${lon}`);
     } catch (error) {
       console.warn('Failed to fetch best price, using demo data', error);
       return {

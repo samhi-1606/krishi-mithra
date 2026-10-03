@@ -58,7 +58,7 @@ export const generateRecommendations = (
       title: 'Flood Risk Warning',
       description: 'Potential water risk from upstream. Monitor drainage and secure equipment.',
       type: 'warning',
-      priority: 'critical'
+      priority: 'high'
     });
   }
 

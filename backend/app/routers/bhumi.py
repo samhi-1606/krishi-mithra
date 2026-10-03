@@ -2,10 +2,12 @@ from fastapi import APIRouter
 from app.models.schemas import ChatRequest
 from app.services.bhumi_service import get_bhumi_response
 from typing import List, Dict, Any
+from collections import deque
 
 router = APIRouter(prefix="/bhumi", tags=["Bhumi AI"])
 
-chat_history: Dict[str, List[Dict[str, str]]] = {}
+MAX_HISTORY_PER_USER = 100
+chat_history: Dict[str, deque] = {}
 
 @router.post("/chat")
 async def chat_with_bhumi(request: ChatRequest):
@@ -13,7 +15,7 @@ async def chat_with_bhumi(request: ChatRequest):
     
     farmer_id = request.farmer_context.get("id", "anonymous") if request.farmer_context else "anonymous"
     if farmer_id not in chat_history:
-        chat_history[farmer_id] = []
+        chat_history[farmer_id] = deque(maxlen=MAX_HISTORY_PER_USER)
         
     chat_history[farmer_id].append({"role": "user", "content": request.message})
     chat_history[farmer_id].append({"role": "assistant", "content": response})
@@ -22,4 +24,4 @@ async def chat_with_bhumi(request: ChatRequest):
 
 @router.get("/history/{farmer_id}")
 async def get_history(farmer_id: str):
-    return chat_history.get(farmer_id, [])
+    return list(chat_history.get(farmer_id, []))

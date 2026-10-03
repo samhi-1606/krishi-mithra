@@ -16,7 +16,7 @@ function createTranslationAccessor(translations: TranslationStrings): Translatio
       .map((w, i) => i === 0 ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
       .join('');
     
-    const val = (translations as Record<string, unknown>)[camelKey];
+    const val = translations[camelKey as keyof TranslationStrings];
     if (typeof val === 'string') return val;
     
     // Return fallback or the key itself
@@ -24,9 +24,7 @@ function createTranslationAccessor(translations: TranslationStrings): Translatio
   };
 
   // Copy all translation properties onto the function
-  Object.keys(translations).forEach(key => {
-    (fn as Record<string, unknown>)[key] = (translations as Record<string, unknown>)[key];
-  });
+  Object.assign(fn, translations);
 
   return fn as TranslationAccessor;
 }

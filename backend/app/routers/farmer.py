@@ -23,7 +23,7 @@ async def get_farmer(farmer_id: str):
 async def update_farmer(farmer_id: str, farmer: Farmer):
     if farmer_id not in farmers_db:
         raise HTTPException(status_code=404, detail="Farmer not found")
-    farmer_dict = farmer.dict()
+    farmer_dict = farmer.model_dump()
     farmer_dict["id"] = farmer_id
     farmers_db[farmer_id] = farmer_dict
     return farmer_dict
@@ -31,7 +31,7 @@ async def update_farmer(farmer_id: str, farmer: Farmer):
 @router.post("/")
 async def create_farmer(farmer: Farmer):
     new_id = str(uuid.uuid4())
-    farmer_dict = farmer.dict()
+    farmer_dict = farmer.model_dump()
     farmer_dict["id"] = new_id
     farmers_db[new_id] = farmer_dict
     return farmer_dict

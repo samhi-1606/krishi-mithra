@@ -1,15 +1,22 @@
-import { api } from './api';
+﻿import { api } from './api';
 import { ChatMessage, ChatResponse, Farmer } from '../types';
 import { getDemoBhumiResponse } from '../data/demoData';
 
 export const bhumiService = {
   chat: async (message: string, farmerContext: Farmer | null, preferredLanguage: string): Promise<ChatResponse> => {
     try {
-      return await api.post<ChatResponse>(`/bhumi/chat`, { 
-        message, 
-        farmerId: farmerContext?.id,
-        language: preferredLanguage 
+      const backendResponse = await api.post<{ response: string }>(`/bhumi/chat`, {
+        message,
+        farmer_context: farmerContext ? {
+          id: farmerContext.id,
+          name: farmerContext.name,
+          crops: [farmerContext.farmDetails?.primaryCrop].filter(Boolean),
+          location: farmerContext.location?.region || ''
+        } : null,
+        preferred_language: preferredLanguage
       });
+      // Map backend response shape to frontend ChatResponse shape
+      return { text: backendResponse.response };
     } catch (error) {
       console.warn('Failed to reach Bhumi API, using fallback engine', error);
       // Simulate network delay
