@@ -8,28 +8,35 @@ import {
 import { useFarmer } from '../hooks/useFarmer';
 import { useLanguage } from '../hooks/useLanguage';
 import { useAlerts } from '../hooks/useAlerts';
+import { demoFarmers } from '../data/demoData';
+import { Alert } from '../types';
+
+const ALERT_TARGETS: Record<Alert['type'], string> = {
+  weather: '/weather',
+  disease: '/farm/satellite',
+  water: '/water',
+  market: '/mandi',
+  system: '/notifications',
+};
 
 const DashboardPage: React.FC = () => {
-  const { farmer } = useFarmer();
+  const { farmer, selectDemoFarmer } = useFarmer();
   const { t } = useLanguage();
-  const { alerts } = useAlerts();
+  const { alerts, unreadCount } = useAlerts();
 
-  // Helper to get alert icon based on severity
-  const getAlertIcon = (severity: string) => {
+  const getAlertIcon = (severity: Alert['severity']) => {
     switch (severity) {
-      case 'high': return <AlertTriangle className="h-5 w-5 text-white" />;
-      case 'medium': return <AlertCircle className="h-5 w-5 text-white" />;
+      case 'critical': return <AlertTriangle className="h-5 w-5 text-white" />;
+      case 'warning': return <AlertCircle className="h-5 w-5 text-white" />;
       default: return <Info className="h-5 w-5 text-white" />;
     }
   };
 
-  // Helper for alert colors
-  const getAlertStyle = (severity: string) => {
+  const getAlertStyle = (severity: Alert['severity']) => {
     switch (severity) {
-      case 'high': return 'bg-[#D32F2F] text-white';
-      case 'medium': return 'bg-[#F57C00] text-white';
-      case 'low': return 'bg-[#F9A825] text-white';
-      default: return 'bg-gray-500 text-white';
+      case 'critical': return 'bg-[#D32F2F] text-white';
+      case 'warning': return 'bg-[#F57C00] text-white';
+      default: return 'bg-[#1565C0] text-white';
     }
   };
 
@@ -83,7 +90,7 @@ const DashboardPage: React.FC = () => {
             </div>
             <div className="mb-2">
               <span className="badge-warning text-xs font-semibold px-2 py-1 rounded bg-yellow-100 text-yellow-800">
-                3 things need attention
+                {unreadCount} {t.thingsNeedAttention}
               </span>
             </div>
           </div>
@@ -137,10 +144,10 @@ const DashboardPage: React.FC = () => {
 
       {/* d) Needs Your Attention */}
       <section>
-        <h2 className="section-title text-lg font-bold text-gray-800 mb-4">Needs Your Attention</h2>
+        <h2 className="section-title text-lg font-bold text-gray-800 mb-4">{t.needsAttention}</h2>
         <div className="space-y-3">
           {alerts && alerts.length > 0 ? (
-            alerts.slice(0, 3).map((alert: any) => (
+            alerts.slice(0, 3).map((alert) => (
               <div key={alert.id} className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex items-start sm:items-center flex-col sm:flex-row gap-4">
                 <div className={`p-2 rounded-full flex-shrink-0 ${getAlertStyle(alert.severity)}`}>
                   {getAlertIcon(alert.severity)}
@@ -148,16 +155,11 @@ const DashboardPage: React.FC = () => {
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <h4 className="font-bold text-gray-900">{alert.title}</h4>
-                    {alert.confidence && (
-                      <span className="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                        {alert.confidence}% confidence
-                      </span>
-                    )}
                   </div>
-                  <p className="text-sm text-gray-600 mt-1">{alert.description}</p>
+                  <p className="text-sm text-gray-600 mt-1">{alert.message}</p>
                 </div>
-                <Link to={alert.actionLink || '#'} className="btn-outline flex-shrink-0 whitespace-nowrap px-4 py-2 text-sm font-medium border border-gray-300 rounded hover:bg-gray-50 flex items-center w-full sm:w-auto justify-center">
-                  {alert.actionText || 'View'} <ArrowRight className="h-4 w-4 ml-1" />
+                <Link to={alert.actionLink || ALERT_TARGETS[alert.type] || '/notifications'} className="btn-outline flex-shrink-0 whitespace-nowrap px-4 py-2 text-sm font-medium border border-gray-300 rounded hover:bg-gray-50 flex items-center w-full sm:w-auto justify-center">
+                  {t.view} <ArrowRight className="h-4 w-4 ml-1" />
                 </Link>
               </div>
             ))
@@ -312,9 +314,12 @@ const DashboardPage: React.FC = () => {
 
       {/* h) Demo Mode Badge */}
       <div className="mt-8 flex flex-col items-center justify-center p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <span className="text-xs font-bold tracking-wider text-gray-500 mb-2">DEMO MODE</span>
-        <button className="text-sm text-[#2E7D32] font-medium hover:underline focus:outline-none">
-          Load Demo Scenario
+        <span className="text-xs font-bold tracking-wider text-gray-500 mb-2">{t.demoMode.toUpperCase()}</span>
+        <button
+          onClick={() => selectDemoFarmer(demoFarmers[0].id)}
+          className="text-sm text-[#2E7D32] font-medium hover:underline focus:outline-none"
+        >
+          {t.loadDemoScenario}
         </button>
       </div>
 

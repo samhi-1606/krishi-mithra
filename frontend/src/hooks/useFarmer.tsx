@@ -1,6 +1,18 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { Farmer } from '../types';
 import { demoFarmers } from '../data/demoData';
+
+const STORAGE_KEY = 'krishi_current_farmer';
+
+const readSavedFarmer = (): Farmer | null => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? (JSON.parse(saved) as Farmer) : null;
+  } catch {
+    console.error('Failed to read saved farmer');
+    return null;
+  }
+};
 
 type FarmerContextType = {
   farmer: Farmer | null;
@@ -19,29 +31,17 @@ const FarmerContext = createContext<FarmerContextType>({
 });
 
 export const FarmerProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
-  const [farmer, setFarmerState] = useState<Farmer | null>(null);
-  const [isDemo, setIsDemo] = useState(false);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('krishi_current_farmer');
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setFarmerState(parsed);
-        setIsDemo(demoFarmers.some(df => df.id === parsed.id));
-      } catch (e) {
-        console.error("Failed to parse saved farmer");
-      }
-    } else {
-      // Auto-select first demo farmer if none selected
-      setFarmerState(demoFarmers[0]);
-      setIsDemo(true);
-    }
-  }, []);
+  // Loaded eagerly: a null first render would bounce a returning farmer to onboarding.
+  const [farmer, setFarmerState] = useState<Farmer | null>(readSavedFarmer);
+  const [isDemo, setIsDemo] = useState(() => demoFarmers.some(df => df.id === readSavedFarmer()?.id));
 
   const setFarmer = (newFarmer: Farmer) => {
     setFarmerState(newFarmer);
-    localStorage.setItem('krishi_current_farmer', JSON.stringify(newFarmer));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newFarmer));
+    } catch {
+      console.error('Failed to persist farmer');
+    }
     setIsDemo(demoFarmers.some(df => df.id === newFarmer.id));
   };
 
@@ -54,7 +54,11 @@ export const FarmerProvider: React.FC<{children: React.ReactNode}> = ({ children
 
   const clearFarmer = () => {
     setFarmerState(null);
-    localStorage.removeItem('krishi_current_farmer');
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      console.error('Failed to clear saved farmer');
+    }
     setIsDemo(false);
   };
 

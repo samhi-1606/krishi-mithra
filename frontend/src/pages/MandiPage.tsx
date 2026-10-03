@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Search, MapPin, TrendingUp, TrendingDown, Star } from 'lucide-react';
+import { MapPin, TrendingUp, TrendingDown, Star } from 'lucide-react';
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-
-// Mock hooks
-const useLanguage = () => ({ t: (key: string) => key });
-const useFarmer = () => ({ farmer: { crop: 'Rice' } });
-const useAlerts = () => ({ alerts: [], addAlert: () => {} });
+import { useLanguage } from '../hooks/useLanguage';
+import { useFarmer } from '../hooks/useFarmer';
+import EmptyState from '../components/common/EmptyState';
 
 const demoData = [
   { id: 1, crop: 'Rice', market: 'Warangal', district: 'Warangal', price: 2100, date: '2023-10-01', trend: 'up', emoji: '🌾' },
@@ -36,9 +34,12 @@ export default function MandiPage() {
 
   if (loading) return <div className="p-4">{t('Loading...')}</div>;
 
+  const markets = Array.from(new Set(demoData.map(d => d.market)));
+
   const filteredData = demoData.filter(d => 
     (filterCrop === 'All' || d.crop === filterCrop) &&
-    (filterDistrict === 'All' || d.district === filterDistrict)
+    (filterDistrict === 'All' || d.district === filterDistrict) &&
+    (filterMarket === 'All' || d.market === filterMarket)
   );
 
   return (
@@ -65,13 +66,14 @@ export default function MandiPage() {
         </select>
         <select className="select-field border p-2 rounded" value={filterMarket} onChange={e => setFilterMarket(e.target.value)}>
           <option value="All">All Markets</option>
+          {markets.map(m => <option key={m} value={m}>{m}</option>)}
         </select>
       </div>
 
       <div className="card p-4 bg-[#FAF7EF] border-l-4 border-[#2E7D32] rounded shadow">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold flex items-center gap-2"><Star className="text-[#F9A825]" /> Best Nearby Price - {farmer.crop}</h2>
+            <h2 className="text-lg font-bold flex items-center gap-2"><Star className="text-[#F9A825]" /> Best Nearby Price - {farmer?.farmDetails?.primaryCrop || 'Rice'}</h2>
             <p className="text-2xl font-bold text-[#2E7D32]">₹2120/quintal</p>
             <p className="flex items-center text-sm text-green-600"><TrendingUp size={16} /> 2.5% vs yesterday</p>
           </div>
@@ -102,6 +104,10 @@ export default function MandiPage() {
           </div>
         ))}
       </div>
+
+      {filteredData.length === 0 && (
+        <EmptyState title={t('No data')} description="No mandi prices match the selected filters." />
+      )}
 
       <div className="card p-4 bg-white border rounded shadow h-64">
         <h3 className="font-bold mb-4">{t('Price Trend')}</h3>

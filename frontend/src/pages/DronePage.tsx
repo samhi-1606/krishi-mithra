@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Plane, Upload, Eye, AlertTriangle } from 'lucide-react';
-
-const useLanguage = () => ({ t: (key: string) => key });
+import { useLanguage } from '../hooks/useLanguage';
 
 export default function DronePage() {
   const { t } = useLanguage();
@@ -9,17 +8,17 @@ export default function DronePage() {
 
   return (
     <div className="p-4 space-y-6 animate-slide-up">
-      <h1 className="text-2xl font-bold text-[#2E7D32] flex items-center gap-2"><Plane /> 🛸 Drone Scan</h1>
+      <h1 className="text-2xl font-bold text-[#2E7D32] flex items-center gap-2"><Plane /> 🛸 {t.droneScan}</h1>
 
       {!showDemo ? (
         <div className="flex gap-4">
           <button className="flex-1 bg-white border-2 border-dashed border-gray-300 p-8 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-[#2E7D32] transition-colors">
             <Upload size={32} className="text-gray-400" />
-            <span className="font-semibold text-gray-600">Upload Drone Image</span>
+            <span className="font-semibold text-gray-600">{t.uploadDroneImage}</span>
           </button>
           <button onClick={() => setShowDemo(true)} className="flex-1 bg-[#2E7D32] text-white p-8 rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-green-700 transition-colors shadow-lg">
             <Eye size={32} />
-            <span className="font-semibold">Use Demo Drone Scan</span>
+            <span className="font-semibold">{t.useDemoScan}</span>
           </button>
         </div>
       ) : (

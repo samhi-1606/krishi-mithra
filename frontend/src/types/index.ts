@@ -248,7 +248,7 @@ export interface Recommendation {
   title: string;
   description: string;
   type: 'action' | 'info' | 'warning';
-  priority: 'low' | 'medium' | 'high';
+  priority: 'low' | 'medium' | 'high' | 'critical';
 }
 
 export interface OnboardingData {

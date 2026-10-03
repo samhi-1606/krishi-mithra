@@ -1,4 +1,5 @@
-export const BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+// Defaults to the relative path so the Vite dev proxy (see vite.config.ts) handles it.
+export const BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 interface RequestOptions extends RequestInit {
   timeout?: number;
@@ -20,19 +21,18 @@ const fetchWithTimeout = async (url: string, options: RequestOptions = {}) => {
       },
     });
     
-    clearTimeout(id);
-    
     if (!response.ok) {
       throw new Error(`API Error: ${response.status} ${response.statusText}`);
     }
     
     return await response.json();
   } catch (error: any) {
-    clearTimeout(id);
     if (error.name === 'AbortError') {
       throw new Error('Request timed out');
     }
     throw error;
+  } finally {
+    clearTimeout(id);
   }
 };
 

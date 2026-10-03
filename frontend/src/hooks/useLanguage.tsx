@@ -8,6 +8,8 @@ import type { TranslationStrings } from '../i18n/types';
 type TranslationAccessor = TranslationStrings & ((key: string, fallback?: string) => string);
 
 function createTranslationAccessor(translations: TranslationStrings): TranslationAccessor {
+  const strings = translations as unknown as Record<string, unknown>;
+
   const fn = (key: string, fallback?: string): string => {
     // Try to find the key in translations (camelCase match)
     const camelKey = key
@@ -16,7 +18,7 @@ function createTranslationAccessor(translations: TranslationStrings): Translatio
       .map((w, i) => i === 0 ? w.toLowerCase() : w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
       .join('');
     
-    const val = (translations as Record<string, unknown>)[camelKey];
+    const val = strings[camelKey];
     if (typeof val === 'string') return val;
     
     // Return fallback or the key itself
@@ -24,11 +26,12 @@ function createTranslationAccessor(translations: TranslationStrings): Translatio
   };
 
   // Copy all translation properties onto the function
-  Object.keys(translations).forEach(key => {
-    (fn as Record<string, unknown>)[key] = (translations as Record<string, unknown>)[key];
+  const accessor = fn as unknown as Record<string, unknown>;
+  Object.keys(strings).forEach(key => {
+    accessor[key] = strings[key];
   });
 
-  return fn as TranslationAccessor;
+  return accessor as unknown as TranslationAccessor;
 }
 
 type LanguageContextType = {

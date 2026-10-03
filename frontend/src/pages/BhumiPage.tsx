@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useLanguage } from '../hooks/useLanguage';
 import { useFarmer } from '../hooks/useFarmer';
-import { useAlerts } from '../hooks/useAlerts';
 import { Send, Mic, MapPin, TestTube, Sprout } from 'lucide-react';
 
 interface Message {
@@ -48,12 +47,20 @@ const bhumiService = {
 };
 
 export default function BhumiPage() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const { farmer } = useFarmer();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const farmContext = {
+    name: farmer?.name || 'Farmer',
+    location: farmer?.location?.address || 'Warangal',
+    crops: farmer?.farmDetails?.primaryCrop ? [farmer.farmDetails.primaryCrop] : ['Rice'],
+    farmArea: farmer?.farmDetails?.area ?? 5,
+    irrigation: farmer?.farmDetails?.irrigationType || 'Borewell',
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -78,13 +85,7 @@ export default function BhumiPage() {
     setIsTyping(true);
 
     try {
-      const response = await bhumiService.chat(text, {
-        name: farmer?.name || 'Farmer',
-        location: farmer?.locationName || 'Warangal',
-        crops: farmer?.crops || ['Rice'],
-        farmArea: farmer?.farmArea || 5,
-        irrigation: farmer?.irrigation || 'Borewell'
-      });
+      const response = await bhumiService.chat(text, farmContext);
 
       const bhumiMsg: Message = {
         id: (Date.now() + 1).toString(),
@@ -96,6 +97,12 @@ export default function BhumiPage() {
       setMessages(prev => [...prev, bhumiMsg]);
     } catch (error) {
       console.error(error);
+      setMessages(prev => [...prev, {
+        id: (Date.now() + 1).toString(),
+        text: t.liveDataUnavailable,
+        sender: 'bhumi',
+        timestamp: new Date()
+      }]);
     } finally {
       setIsTyping(false);
     }
@@ -106,20 +113,20 @@ export default function BhumiPage() {
       {/* Header */}
       <div className="bg-white shadow-sm border-b px-6 py-4 flex flex-col items-center justify-center relative z-10">
         <h1 className="text-2xl font-bold text-[#2E7D32] flex items-center gap-2">
-          <span className="text-3xl">🤖</span> Bhumi AI
+          <span className="text-3xl">🤖</span> {t.bhumiTitle}
         </h1>
-        <p className="text-gray-500 text-sm mt-1">Your advanced farming companion</p>
+        <p className="text-gray-500 text-sm mt-1">{t.bhumiSubtitle}</p>
         
         {/* Context Pills */}
         <div className="flex gap-2 mt-3 overflow-x-auto max-w-full pb-1 scrollbar-hide">
           <span className="flex items-center gap-1 bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-medium border border-green-200">
-            <MapPin className="w-3 h-3" /> {farmer?.locationName || 'Warangal'}
+            <MapPin className="w-3 h-3" /> {farmContext.location}
           </span>
           <span className="flex items-center gap-1 bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full text-xs font-medium border border-yellow-200">
-            <Sprout className="w-3 h-3" /> {farmer?.crops?.[0] || 'Rice'}
+            <Sprout className="w-3 h-3" /> {farmContext.crops[0]}
           </span>
           <span className="flex items-center gap-1 bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-xs font-medium border border-blue-200">
-            <TestTube className="w-3 h-3" /> {farmer?.irrigation || 'Borewell'}
+            <TestTube className="w-3 h-3" /> {farmContext.irrigation}
           </span>
         </div>
       </div>

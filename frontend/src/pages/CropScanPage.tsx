@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Camera, Image as ImageIcon, Search, ShieldAlert, CheckCircle2 } from 'lucide-react';
-
-const useLanguage = () => ({ t: (key: string) => key });
+import { useLanguage } from '../hooks/useLanguage';
 
 export default function CropScanPage() {
   const { t } = useLanguage();
@@ -18,21 +17,21 @@ export default function CropScanPage() {
 
   return (
     <div className="p-4 space-y-6 animate-slide-up">
-      <h1 className="text-2xl font-bold text-[#2E7D32] flex items-center gap-2"><Camera /> 📸 Scan Your Crop</h1>
+      <h1 className="text-2xl font-bold text-[#2E7D32] flex items-center gap-2"><Camera /> 📸 {t.scanYourCrop}</h1>
 
       {!scanning && !result && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <button className="bg-white p-6 rounded-lg border-2 border-gray-200 hover:border-[#2E7D32] flex flex-col items-center gap-3 transition">
             <div className="bg-blue-100 p-3 rounded-full"><ImageIcon className="text-blue-600" size={24} /></div>
-            <span className="font-semibold">Upload Image</span>
+            <span className="font-semibold">{t.uploadImage}</span>
           </button>
           <button className="bg-white p-6 rounded-lg border-2 border-gray-200 hover:border-[#2E7D32] flex flex-col items-center gap-3 transition">
             <div className="bg-green-100 p-3 rounded-full"><Camera className="text-green-600" size={24} /></div>
-            <span className="font-semibold">Take Photo</span>
+            <span className="font-semibold">{t.cameraInput}</span>
           </button>
           <button onClick={handleDemo} className="bg-[#FAF7EF] p-6 rounded-lg border-2 border-[#2E7D32] flex flex-col items-center gap-3 transition shadow-sm">
             <div className="bg-orange-100 p-3 rounded-full"><Search className="text-orange-600" size={24} /></div>
-            <span className="font-semibold text-[#2E7D32]">Use Demo Image</span>
+            <span className="font-semibold text-[#2E7D32]">{t.useDemoImage}</span>
           </button>
         </div>
       )}

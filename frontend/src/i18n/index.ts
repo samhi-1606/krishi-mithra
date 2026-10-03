@@ -33,8 +33,26 @@ const translations: Record<string, TranslationStrings> = {
   en, hi, te, bn, mr, ta, gu, ur, kn, or, ml, pa, as: asLang
 };
 
+// Untranslated keys are still shipped as "[XX] keyName" markers. Showing those raw
+// would leak debug text into the UI, so they fall back to the English string.
+const PLACEHOLDER = /^\[[A-Z]{2}\]\s/;
+
+const withEnglishFallback = (strings: TranslationStrings): TranslationStrings => {
+  const merged = { ...en } as Record<string, string>;
+  for (const [key, value] of Object.entries(strings)) {
+    if (typeof value === 'string' && value && !PLACEHOLDER.test(value)) {
+      merged[key] = value;
+    }
+  }
+  return merged as unknown as TranslationStrings;
+};
+
+const resolved: Record<string, TranslationStrings> = Object.fromEntries(
+  Object.entries(translations).map(([code, strings]) => [code, withEnglishFallback(strings)])
+);
+
 export const getTranslation = (lang: string): TranslationStrings => {
-  return translations[lang] || translations['en'];
+  return resolved[lang] || resolved['en'];
 };
 
 export const languages = supportedLanguages;

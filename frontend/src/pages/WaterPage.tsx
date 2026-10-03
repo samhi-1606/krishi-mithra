@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Circle, Polyline, useMap } from 'react-leaflet';
+import React, { useEffect, useRef, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, Circle, Polyline } from 'react-leaflet';
 import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { useLanguage } from '../hooks/useLanguage';
 import { useFarmer } from '../hooks/useFarmer';
 import { useAlerts } from '../hooks/useAlerts';
-import { Droplets, Info, AlertTriangle, ShieldCheck, Activity, MapPin, Waves, RefreshCw } from 'lucide-react';
+import { Info, AlertTriangle, ShieldCheck, Activity, Waves, RefreshCw } from 'lucide-react';
 
 const createIcon = (color: string, emoji: string) => L.divIcon({
   html: `<div style="background:${color};width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;border:3px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3)">${emoji}</div>`,
@@ -42,29 +43,39 @@ export default function WaterPage() {
 
   const [activeTab, setActiveTab] = useState('overview');
   const [simulationState, setSimulationState] = useState<'normal' | 'dam' | 'river' | 'risk' | 'farm' | 'completed'>('normal');
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  const farmLat = farmer?.location?.lat || 17.97;
-  const farmLng = farmer?.location?.lng || 79.59;
+  const farmLat = farmer?.location?.lat ?? 17.97;
+  const farmLng = farmer?.location?.lon ?? 79.59;
+
+  const clearTimers = () => {
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
+  };
+
+  useEffect(() => clearTimers, []);
 
   const handleSimulate = () => {
+    clearTimers();
     setSimulationState('dam');
-    setTimeout(() => setSimulationState('river'), 1500);
-    setTimeout(() => setSimulationState('risk'), 3000);
-    setTimeout(() => setSimulationState('farm'), 4500);
-    setTimeout(() => {
-      setSimulationState('completed');
-      addAlert({
-        id: Date.now().toString(),
-        title: '🚨 Potential Downstream Water Risk',
-        message: 'Upstream water release detected. Your registered farm is inside the monitored downstream region. Risk: MODERATE',
-        type: 'danger',
-        timestamp: new Date().toISOString(),
-        read: false
-      });
-    }, 6000);
+    timersRef.current = [
+      setTimeout(() => setSimulationState('river'), 1500),
+      setTimeout(() => setSimulationState('risk'), 3000),
+      setTimeout(() => setSimulationState('farm'), 4500),
+      setTimeout(() => {
+        setSimulationState('completed');
+        addAlert({
+          title: '🚨 Potential Downstream Water Risk',
+          message: 'Upstream water release detected. Your registered farm is inside the monitored downstream region. Risk: MODERATE',
+          type: 'water',
+          severity: 'warning',
+        });
+      }, 6000),
+    ];
   };
 
   const resetSimulation = () => {
+    clearTimers();
     setSimulationState('normal');
   };
 
@@ -75,7 +86,7 @@ export default function WaterPage() {
         <div className="p-4 bg-[#2E7D32] text-white">
           <h2 className="text-xl font-bold flex items-center gap-2">
             <Waves className="w-6 h-6" />
-            Water Intelligence
+            {t.waterIntelligence}
           </h2>
           <p className="text-sm opacity-90 mt-1">Real-time hydrological monitoring</p>
         </div>
@@ -121,7 +132,7 @@ export default function WaterPage() {
                 <div className="card border-l-4 border-orange-500 p-4 bg-white shadow-sm rounded-lg">
                   <h4 className="font-semibold text-gray-900 flex items-center gap-2 mb-2">
                     <Info className="w-4 h-4 text-orange-500" />
-                    Water Recommendations
+                    {t.waterRecommendations}
                   </h4>
                   <ul className="text-sm text-gray-600 space-y-2 list-disc pl-4">
                     <li>Monitor official water updates closely</li>
@@ -140,7 +151,7 @@ export default function WaterPage() {
                     className="w-full btn-primary py-3 rounded-lg flex items-center justify-center gap-2 bg-[#D32F2F] hover:bg-red-800 text-white font-medium shadow-md transition-all"
                   >
                     <Activity className="w-5 h-5" />
-                    Simulate Dam Release
+                    {t.simulateDamRelease}
                   </button>
                 ) : (
                   <button 
@@ -236,8 +247,8 @@ export default function WaterPage() {
           <Marker position={[farmLat, farmLng]} icon={createIcon('#2E7D32', '🌾')}>
             <Popup>
               <div className="font-bold text-gray-900">{farmer?.name || 'Your Farm'}</div>
-              <div className="text-sm text-gray-600">{farmer?.crops?.join(', ') || 'Mixed Crops'}</div>
-              <div className="text-xs text-gray-500 mt-1">{farmer?.farmArea ? `${farmer.farmArea} acres` : 'Area not specified'}</div>
+              <div className="text-sm text-gray-600">{farmer?.farmDetails?.primaryCrop || 'Mixed Crops'}</div>
+              <div className="text-xs text-gray-500 mt-1">{farmer?.farmDetails?.area ? `${farmer.farmDetails.area} acres` : 'Area not specified'}</div>
             </Popup>
           </Marker>
 

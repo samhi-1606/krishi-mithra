@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ExternalLink, CheckCircle, Info } from 'lucide-react';
-
-const useLanguage = () => ({ t: (key: string) => key });
+import { useLanguage } from '../hooks/useLanguage';
 
 const schemes = [
   { id: 1, name: 'PM-KISAN', type: 'Central', eligibility: 'Small and marginal farmers', benefit: '₹6,000 per year in 3 installments', how: 'Apply via CSC or pmkisan.gov.in' },
@@ -21,11 +20,11 @@ export default function SchemesPage() {
   
   return (
     <div className="p-4 space-y-6 animate-slide-up">
-      <h1 className="text-2xl font-bold text-[#2E7D32]">{t('Government Schemes')}</h1>
+      <h1 className="text-2xl font-bold text-[#2E7D32]">{t.governmentSchemes}</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <select className="select-field border p-2 rounded" value={region} onChange={e => setRegion(e.target.value)}>
-          <option value="All">All Regions</option>
+          <option value="All">{t.allDistricts}</option>
           <option value="Telangana">Telangana</option>
         </select>
         <select className="select-field border p-2 rounded" value={crop} onChange={e => setCrop(e.target.value)}>
@@ -44,21 +43,21 @@ export default function SchemesPage() {
             
             <div className="space-y-3 text-sm">
               <div>
-                <span className="font-semibold text-gray-700 flex items-center gap-1"><CheckCircle size={14} className="text-green-600" /> Eligibility:</span>
+                <span className="font-semibold text-gray-700 flex items-center gap-1"><CheckCircle size={14} className="text-green-600" /> {t.eligibility}:</span>
                 <p className="text-gray-600 ml-5">{s.eligibility}</p>
               </div>
               <div>
-                <span className="font-semibold text-gray-700 flex items-center gap-1"><Info size={14} className="text-blue-600" /> Benefit:</span>
+                <span className="font-semibold text-gray-700 flex items-center gap-1"><Info size={14} className="text-blue-600" /> {t.benefit}:</span>
                 <p className="text-gray-600 ml-5">{s.benefit}</p>
               </div>
               <div>
-                <span className="font-semibold text-gray-700">How to Apply:</span>
+                <span className="font-semibold text-gray-700">{t.howToApply}:</span>
                 <p className="text-gray-600">{s.how}</p>
               </div>
             </div>
             
             <button className="mt-4 w-full btn-outline border border-[#2E7D32] text-[#2E7D32] py-2 rounded flex items-center justify-center gap-2 hover:bg-green-50">
-              Visit Official Source <ExternalLink size={16} />
+              {t.officialSource} <ExternalLink size={16} />
             </button>
           </div>
         ))}

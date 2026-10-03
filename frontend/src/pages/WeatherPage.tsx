@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CloudRain, Sun, Wind, Droplets, AlertTriangle } from 'lucide-react';
-
-const useLanguage = () => ({ t: (key: string) => key });
+import { useLanguage } from '../hooks/useLanguage';
 
 const demoForecast = [
   { day: 'Mon', high: 35, low: 24, rain: 10, humidity: 60, wind: 12 },

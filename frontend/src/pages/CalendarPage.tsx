@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar as CalIcon, Sprout, Wheat, Leaf } from 'lucide-react';
-
-const useLanguage = () => ({ t: (key: string) => key });
+import { useLanguage } from '../hooks/useLanguage';
 
 export default function CalendarPage() {
   const { t } = useLanguage();

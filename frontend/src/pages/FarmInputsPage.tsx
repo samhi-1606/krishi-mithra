@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Package, Sprout, TestTube, Bug } from 'lucide-react';
-
-const useLanguage = () => ({ t: (key: string) => key });
+import { useLanguage } from '../hooks/useLanguage';
 
 export default function FarmInputsPage() {
   const { t } = useLanguage();

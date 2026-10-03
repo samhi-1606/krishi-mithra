@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { Alert } from '../types';
 import { demoAlerts } from '../data/demoData';
 
@@ -7,6 +7,7 @@ type AlertContextType = {
   unreadCount: number;
   addAlert: (alert: Omit<Alert, 'id' | 'date' | 'read'>) => void;
   markRead: (id: string) => void;
+  markAllRead: () => void;
   clearAlerts: () => void;
 };
 
@@ -15,16 +16,12 @@ const AlertContext = createContext<AlertContextType>({
   unreadCount: 0,
   addAlert: () => {},
   markRead: () => {},
+  markAllRead: () => {},
   clearAlerts: () => {},
 });
 
 export const AlertProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
-  const [alerts, setAlerts] = useState<Alert[]>([]);
-
-  useEffect(() => {
-    // Load demo alerts initially if empty
-    setAlerts(demoAlerts);
-  }, []);
+  const [alerts, setAlerts] = useState<Alert[]>(demoAlerts);
 
   const unreadCount = alerts.filter(a => !a.read).length;
 
@@ -42,12 +39,16 @@ export const AlertProvider: React.FC<{children: React.ReactNode}> = ({ children 
     setAlerts(prev => prev.map(a => a.id === id ? { ...a, read: true } : a));
   };
 
+  const markAllRead = () => {
+    setAlerts(prev => prev.map(a => a.read ? a : { ...a, read: true }));
+  };
+
   const clearAlerts = () => {
     setAlerts([]);
   };
 
   return (
-    <AlertContext.Provider value={{ alerts, unreadCount, addAlert, markRead, clearAlerts }}>
+    <AlertContext.Provider value={{ alerts, unreadCount, addAlert, markRead, markAllRead, clearAlerts }}>
       {children}
     </AlertContext.Provider>
   );

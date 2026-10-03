@@ -1,51 +1,62 @@
-import React, { useState } from 'react';
-import { Settings, User, Globe, Info, Save } from 'lucide-react';
-
-const useLanguage = () => ({ t: (key: string) => key });
+import React from 'react';
+import { Settings, User, Globe, Info } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
+import { useFarmer } from '../hooks/useFarmer';
+import { supportedLanguages } from '../i18n';
+import { demoFarmers } from '../data/demoData';
 
 export default function SettingsPage() {
-  const { t } = useLanguage();
-  const [language, setLanguage] = useState('en');
-  const [demoFarmer, setDemoFarmer] = useState('1');
+  const { t, language, setLanguage } = useLanguage();
+  const { farmer, selectDemoFarmer } = useFarmer();
 
   return (
     <div className="p-4 space-y-6 animate-slide-up max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-[#2E7D32] flex items-center gap-2"><Settings /> {t('Settings')}</h1>
+      <h1 className="text-2xl font-bold text-[#2E7D32] flex items-center gap-2"><Settings /> {t.settings}</h1>
 
       <div className="bg-white rounded-lg shadow border overflow-hidden">
         
         <div className="p-5 border-b">
-          <h2 className="font-bold text-lg mb-4 flex items-center gap-2"><Globe size={20} className="text-blue-500" /> Language Preferences</h2>
+          <h2 className="font-bold text-lg mb-4 flex items-center gap-2"><Globe size={20} className="text-blue-500" /> {t.chooseLanguage}</h2>
           <select 
             className="w-full border p-2 rounded bg-gray-50"
             value={language}
             onChange={e => setLanguage(e.target.value)}
           >
-            <option value="en">English</option>
-            <option value="te">తెలుగు (Telugu)</option>
-            <option value="hi">हिंदी (Hindi)</option>
+            {supportedLanguages.map(lang => (
+              <option key={lang.code} value={lang.code}>
+                {lang.nativeName} ({lang.name})
+              </option>
+            ))}
           </select>
           <p className="text-xs text-gray-500 mt-2">Changes apply immediately across the app.</p>
         </div>
 
         <div className="p-5 border-b">
-          <h2 className="font-bold text-lg mb-4 flex items-center gap-2"><User size={20} className="text-green-500" /> Profile & Demo Data</h2>
+          <h2 className="font-bold text-lg mb-4 flex items-center gap-2"><User size={20} className="text-green-500" /> {t.demoMode}</h2>
           <label className="block text-sm font-medium text-gray-700 mb-1">Select Demo Profile</label>
           <select 
             className="w-full border p-2 rounded bg-gray-50"
-            value={demoFarmer}
-            onChange={e => setDemoFarmer(e.target.value)}
+            value={demoFarmers.some(f => f.id === farmer?.id) ? farmer?.id : ''}
+            onChange={e => selectDemoFarmer(e.target.value)}
           >
-            <option value="1">Ramesh (Rice Farmer, Warangal)</option>
-            <option value="2">Suresh (Cotton Farmer, Karimnagar)</option>
+            {!demoFarmers.some(f => f.id === farmer?.id) && (
+              <option value="">{farmer?.name || 'Custom profile'}</option>
+            )}
+            {demoFarmers.map(f => (
+              <option key={f.id} value={f.id}>
+                {f.name} ({f.farmDetails.primaryCrop} farmer, {f.location.region})
+              </option>
+            ))}
           </select>
           
-          <div className="mt-4 p-3 bg-gray-50 rounded border text-sm text-gray-700">
-            <p><strong>Name:</strong> Ramesh</p>
-            <p><strong>Location:</strong> Warangal, Telangana</p>
-            <p><strong>Farm Size:</strong> 4.5 Acres</p>
-            <p><strong>Primary Crop:</strong> Rice</p>
-          </div>
+          {farmer && (
+            <div className="mt-4 p-3 bg-gray-50 rounded border text-sm text-gray-700">
+              <p><strong>Name:</strong> {farmer.name}</p>
+              <p><strong>Location:</strong> {farmer.location.address}</p>
+              <p><strong>Farm Size:</strong> {farmer.farmDetails.area} {t.acres}</p>
+              <p><strong>Primary Crop:</strong> {farmer.farmDetails.primaryCrop}</p>
+            </div>
+          )}
         </div>
 
         <div className="p-5">
@@ -54,12 +65,6 @@ export default function SettingsPage() {
             <p>Krishi Mithra v1.0.0-beta</p>
             <p>© 2026 Farm Intelligence Platform</p>
           </div>
-        </div>
-        
-        <div className="bg-gray-50 p-4 border-t flex justify-end">
-          <button className="bg-[#2E7D32] text-white px-6 py-2 rounded font-bold flex items-center gap-2 hover:bg-green-700 transition">
-            <Save size={18} /> Save Settings
-          </button>
         </div>
       </div>
     </div>
