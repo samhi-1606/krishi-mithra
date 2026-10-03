@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ExternalLink, CheckCircle, Info } from 'lucide-react';
-
-const useLanguage = () => ({ t: (key: string) => key });
+import { useLanguage } from '../hooks/useLanguage';
 
 const schemes = [
   { id: 1, name: 'PM-KISAN', type: 'Central', eligibility: 'Small and marginal farmers', benefit: '₹6,000 per year in 3 installments', how: 'Apply via CSC or pmkisan.gov.in' },
@@ -21,16 +20,16 @@ export default function SchemesPage() {
   
   return (
     <div className="p-4 space-y-6 animate-slide-up">
-      <h1 className="text-2xl font-bold text-[#2E7D32]">{t('Government Schemes')}</h1>
+      <h1 className="text-2xl font-bold text-[#2E7D32]">{t.governmentSchemes}</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <select className="select-field border p-2 rounded" value={region} onChange={e => setRegion(e.target.value)}>
-          <option value="All">All Regions</option>
-          <option value="Telangana">Telangana</option>
+          <option value="All">{t('All Regions')}</option>
+          <option value="Telangana">తెలంగాణ</option>
         </select>
         <select className="select-field border p-2 rounded" value={crop} onChange={e => setCrop(e.target.value)}>
-          <option value="All">All Crops</option>
-          <option value="Rice">Rice</option>
+          <option value="All">{t.allCrops}</option>
+          <option value="Rice">{t('Rice')}</option>
         </select>
       </div>
 
@@ -39,26 +38,26 @@ export default function SchemesPage() {
           <div key={s.id} className="card bg-white border p-5 rounded-lg shadow-sm hover:shadow-md transition-shadow">
             <div className="flex justify-between items-start mb-4">
               <h2 className="font-bold text-lg text-gray-800">{s.name}</h2>
-              <span className="badge-success bg-green-100 text-green-800 text-xs px-2 py-1 rounded">{s.type}</span>
+              <span className="badge-success bg-green-100 text-green-800 text-xs px-2 py-1 rounded">{t(s.type)}</span>
             </div>
             
             <div className="space-y-3 text-sm">
               <div>
-                <span className="font-semibold text-gray-700 flex items-center gap-1"><CheckCircle size={14} className="text-green-600" /> Eligibility:</span>
-                <p className="text-gray-600 ml-5">{s.eligibility}</p>
+                <span className="font-semibold text-gray-700 flex items-center gap-1"><CheckCircle size={14} className="text-green-600" /> {t.eligibility}:</span>
+                <p className="text-gray-600 ml-5">{t(s.eligibility)}</p>
               </div>
               <div>
-                <span className="font-semibold text-gray-700 flex items-center gap-1"><Info size={14} className="text-blue-600" /> Benefit:</span>
-                <p className="text-gray-600 ml-5">{s.benefit}</p>
+                <span className="font-semibold text-gray-700 flex items-center gap-1"><Info size={14} className="text-blue-600" /> {t.benefit}:</span>
+                <p className="text-gray-600 ml-5">{t(s.benefit)}</p>
               </div>
               <div>
-                <span className="font-semibold text-gray-700">How to Apply:</span>
-                <p className="text-gray-600">{s.how}</p>
+                <span className="font-semibold text-gray-700">{t.howToApply}:</span>
+                <p className="text-gray-600">{t(s.how)}</p>
               </div>
             </div>
             
             <button className="mt-4 w-full btn-outline border border-[#2E7D32] text-[#2E7D32] py-2 rounded flex items-center justify-center gap-2 hover:bg-green-50">
-              Visit Official Source <ExternalLink size={16} />
+              {t('Visit Official Source')} <ExternalLink size={16} />
             </button>
           </div>
         ))}

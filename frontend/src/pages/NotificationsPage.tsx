@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Bell, CloudRain, AlertTriangle, TrendingUp, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-
-const useLanguage = () => ({ t: (key: string) => key });
+import { useLanguage } from '../hooks/useLanguage';
 
 const demoNotifications = [
   { id: 1, type: 'weather', title: 'Heavy Rain Alert', desc: 'Expect heavy rainfall in your area tomorrow. Postpone fertilizer application.', time: '2 hours ago', icon: <CloudRain className="text-blue-500" />, color: 'blue', link: '/weather' },
@@ -23,7 +22,7 @@ export default function NotificationsPage() {
         <h1 className="text-2xl font-bold text-[#2E7D32] flex items-center gap-2"><Bell /> {t('Notifications')}</h1>
         {notifications.length > 0 && (
           <button onClick={clearAll} className="text-sm text-gray-500 hover:text-gray-800 flex items-center gap-1">
-            <CheckCircle size={16} /> Mark all as read
+            <CheckCircle size={16} /> {t('Mark all as read')}
           </button>
         )}
       </div>
@@ -31,7 +30,7 @@ export default function NotificationsPage() {
       {notifications.length === 0 ? (
         <div className="bg-gray-50 p-8 rounded-lg text-center border">
           <Bell className="mx-auto text-gray-300 mb-2" size={48} />
-          <p className="text-gray-500">No new notifications.</p>
+          <p className="text-gray-500">{t('No new notifications.')}</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -42,15 +41,15 @@ export default function NotificationsPage() {
               </div>
               <div className="flex-1">
                 <div className="flex justify-between items-start">
-                  <h3 className="font-bold text-gray-800">{n.title}</h3>
-                  <span className="text-xs text-gray-500">{n.time}</span>
+                  <h3 className="font-bold text-gray-800">{t(n.title)}</h3>
+                  <span className="text-xs text-gray-500">{t(n.time)}</span>
                 </div>
-                <p className="text-sm text-gray-600 mt-1">{n.desc}</p>
+                <p className="text-sm text-gray-600 mt-1">{t(n.desc)}</p>
                 <button 
                   onClick={() => navigate(n.link)}
                   className={`mt-2 text-xs font-semibold text-${n.color}-700 hover:underline`}
                 >
-                  View Details →
+                  {t('View Details →')}
                 </button>
               </div>
             </div>

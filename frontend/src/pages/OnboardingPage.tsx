@@ -32,7 +32,7 @@ const CROPS = [
 ];
 
 export default function OnboardingPage() {
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   const { setFarmer } = useFarmer();
   const navigate = useNavigate();
   
@@ -122,11 +122,11 @@ export default function OnboardingPage() {
           {step === 1 && (
             <div className="text-center animate-fade-in space-y-6">
               <div className="text-6xl mb-4 animate-bounce">🌾</div>
-              <h1 className="text-3xl font-bold text-[#2E7D32]">Welcome to Krishi Mithra</h1>
-              <p className="text-gray-500">Your farm's digital companion</p>
+              <h1 className="text-3xl font-bold text-[#2E7D32]">{t.welcome}</h1>
+              <p className="text-gray-500">{t.welcomeSubtitle}</p>
               
               <div className="text-left mt-8">
-                <h3 className="font-semibold text-gray-700 mb-4">Choose your language</h3>
+                <h3 className="font-semibold text-gray-700 mb-4">{t.chooseLanguage}</h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {LANGUAGES.map(lang => (
                     <button
@@ -147,7 +147,7 @@ export default function OnboardingPage() {
               
               <div className="pt-8">
                 <button onClick={loadDemo} className="text-sm text-[#2E7D32] font-medium hover:underline">
-                  Explore Demo Farm instead
+                  {t('Explore Demo Farm instead')}
                 </button>
               </div>
             </div>
@@ -155,48 +155,48 @@ export default function OnboardingPage() {
 
           {step === 2 && (
             <div className="animate-fade-in space-y-6">
-              <h2 className="text-2xl font-bold text-gray-800">Where is your farm?</h2>
-              <p className="text-gray-500">This helps us provide accurate weather and market data.</p>
+              <h2 className="text-2xl font-bold text-gray-800">{t.whereIsYourFarm}</h2>
+              <p className="text-gray-500">{t('This helps us provide accurate weather and market data.')}</p>
               
               <div className="space-y-4 mt-6">
                 <button className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border-2 border-blue-100 bg-blue-50 text-blue-700 font-medium hover:bg-blue-100 transition-colors">
                   <MapPin className="w-5 h-5" />
-                  Use my current location
+                  {t.useMyLocation}
                 </button>
                 
                 <div className="flex items-center gap-4">
                   <div className="h-px bg-gray-200 flex-1"></div>
-                  <span className="text-sm text-gray-400">OR</span>
+                  <span className="text-sm text-gray-400">{t('OR')}</span>
                   <div className="h-px bg-gray-200 flex-1"></div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">State</label>
+                    <label className="text-sm font-medium text-gray-700">{t.state}</label>
                     <select 
                       className="input-field w-full p-3 bg-gray-50 border border-gray-200 rounded-xl"
                       value={formData.state}
                       onChange={e => setFormData({...formData, state: e.target.value})}
                     >
-                      <option>Telangana</option>
-                      <option>Andhra Pradesh</option>
-                      <option>Maharashtra</option>
+                      <option value="Telangana">తెలంగాణ</option>
+                      <option value="Andhra Pradesh">ఆంధ్రప్రదేశ్</option>
+                      <option value="Maharashtra">మహారాష్ట్ర</option>
                     </select>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">District</label>
+                    <label className="text-sm font-medium text-gray-700">{t.district}</label>
                     <select 
                       className="input-field w-full p-3 bg-gray-50 border border-gray-200 rounded-xl"
                       value={formData.district}
                       onChange={e => setFormData({...formData, district: e.target.value})}
                     >
-                      <option>Warangal</option>
-                      <option>Karimnagar</option>
-                      <option>Khammam</option>
+                      <option value="Warangal">వరంగల్</option>
+                      <option value="Karimnagar">కరీంనగర్</option>
+                      <option value="Khammam">ఖమ్మం</option>
                     </select>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Mandal/Taluk</label>
+                    <label className="text-sm font-medium text-gray-700">{t('Mandal/Taluk')}</label>
                     <input 
                       type="text" 
                       className="input-field w-full p-3 bg-gray-50 border border-gray-200 rounded-xl"
@@ -205,7 +205,7 @@ export default function OnboardingPage() {
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-gray-700">Village</label>
+                    <label className="text-sm font-medium text-gray-700">{t.village}</label>
                     <input 
                       type="text" 
                       className="input-field w-full p-3 bg-gray-50 border border-gray-200 rounded-xl"
@@ -220,8 +220,8 @@ export default function OnboardingPage() {
 
           {step === 3 && (
             <div className="animate-fade-in space-y-6">
-              <h2 className="text-2xl font-bold text-gray-800">What do you grow?</h2>
-              <p className="text-gray-500">Select all the crops you are currently growing.</p>
+              <h2 className="text-2xl font-bold text-gray-800">{t.whatDoYouGrow}</h2>
+              <p className="text-gray-500">{t('Select all the crops you are currently growing.')}</p>
               
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
                 {CROPS.map(crop => {
@@ -242,7 +242,7 @@ export default function OnboardingPage() {
                         </div>
                       )}
                       <span className="text-4xl mb-2">{crop.emoji}</span>
-                      <span className="font-medium text-gray-800">{crop.name}</span>
+                      <span className="font-medium text-gray-800">{t(crop.name)}</span>
                     </button>
                   );
                 })}
@@ -252,12 +252,12 @@ export default function OnboardingPage() {
 
           {step === 4 && (
             <div className="animate-fade-in space-y-6">
-              <h2 className="text-2xl font-bold text-gray-800">Tell us about your farm</h2>
-              <p className="text-gray-500">Optional details to help Bhumi AI give better advice.</p>
+              <h2 className="text-2xl font-bold text-gray-800">{t.tellUsAboutFarm}</h2>
+              <p className="text-gray-500">{t('Optional details to help Bhumi AI give better advice.')}</p>
               
               <div className="space-y-5 mt-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Farm Area (in acres)</label>
+                  <label className="text-sm font-medium text-gray-700">{t('Farm Area (in acres)')}</label>
                   <input 
                     type="number" 
                     className="input-field w-full p-3 bg-gray-50 border border-gray-200 rounded-xl"
@@ -267,33 +267,33 @@ export default function OnboardingPage() {
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Soil Type</label>
+                  <label className="text-sm font-medium text-gray-700">{t.soilType}</label>
                   <select 
                     className="input-field w-full p-3 bg-gray-50 border border-gray-200 rounded-xl"
                     value={formData.soilType}
                     onChange={e => setFormData({...formData, soilType: e.target.value})}
                   >
-                    <option>Red soil</option>
-                    <option>Black soil</option>
-                    <option>Alluvial</option>
-                    <option>Sandy</option>
-                    <option>Clayey</option>
-                    <option>Loamy</option>
+                    <option value="Red soil">ఎర్ర నేల</option>
+                    <option value="Black soil">నల్ల నేల</option>
+                    <option value="Alluvial">ఒండ్రు నేల</option>
+                    <option value="Sandy">ఇసుక నేల</option>
+                    <option value="Clayey">బంకమట్టి నేల</option>
+                    <option value="Loamy">లోమీ నేల</option>
                   </select>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Irrigation Method</label>
+                  <label className="text-sm font-medium text-gray-700">{t.irrigation}</label>
                   <select 
                     className="input-field w-full p-3 bg-gray-50 border border-gray-200 rounded-xl"
                     value={formData.irrigation}
                     onChange={e => setFormData({...formData, irrigation: e.target.value})}
                   >
-                    <option>Borewell</option>
-                    <option>Canal</option>
-                    <option>Drip</option>
-                    <option>Rain-fed</option>
-                    <option>Sprinkler</option>
+                    <option value="Borewell">బోరు బావి</option>
+                    <option value="Canal">కాలువ</option>
+                    <option value="Drip">బిందు సేద్యం</option>
+                    <option value="Rain-fed">వర్షాధారం</option>
+                    <option value="Sprinkler">తుంపర సేద్యం</option>
                   </select>
                 </div>
               </div>
@@ -308,7 +308,7 @@ export default function OnboardingPage() {
               onClick={handleBack}
               className="px-5 py-2.5 rounded-xl font-medium text-gray-600 hover:bg-gray-200 flex items-center gap-2 transition-colors"
             >
-              <ChevronLeft className="w-5 h-5" /> Back
+              <ChevronLeft className="w-5 h-5" /> {t.back}
             </button>
           ) : <div></div>}
 
@@ -317,14 +317,14 @@ export default function OnboardingPage() {
               onClick={handleNext}
               className="px-6 py-2.5 rounded-xl font-medium bg-[#2E7D32] hover:bg-green-800 text-white flex items-center gap-2 shadow-md transition-colors"
             >
-              Next <ChevronRight className="w-5 h-5" />
+              {t.next} <ChevronRight className="w-5 h-5" />
             </button>
           ) : (
             <button 
               onClick={handleFinish}
               className="px-8 py-2.5 rounded-xl font-bold bg-[#F9A825] hover:bg-yellow-600 text-gray-900 flex items-center gap-2 shadow-md transition-colors"
             >
-              Get Started <Check className="w-5 h-5" />
+              {t.getStarted} <Check className="w-5 h-5" />
             </button>
           )}
         </div>

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useMemo } from 'react';
 import { getTranslation } from '../i18n';
+import { teUiTranslations } from '../i18n/te';
 import type { TranslationStrings } from '../i18n/types';
 
 // Create a translation accessor that works as both:
@@ -7,7 +8,7 @@ import type { TranslationStrings } from '../i18n/types';
 // - t('Home') (function call - returns the argument as fallback)
 type TranslationAccessor = TranslationStrings & ((key: string, fallback?: string) => string);
 
-function createTranslationAccessor(translations: TranslationStrings): TranslationAccessor {
+function createTranslationAccessor(translations: TranslationStrings, language: string): TranslationAccessor {
   const fn = (key: string, fallback?: string): string => {
     // Try to find the key in translations (camelCase match)
     const camelKey = key
@@ -18,6 +19,8 @@ function createTranslationAccessor(translations: TranslationStrings): Translatio
     
     const val = translations[camelKey as keyof TranslationStrings];
     if (typeof val === 'string') return val;
+
+    if (language === 'te' && teUiTranslations[key]) return teUiTranslations[key];
     
     // Return fallback or the key itself
     return fallback || key;
@@ -35,7 +38,7 @@ type LanguageContextType = {
   t: TranslationAccessor;
 };
 
-const defaultTranslation = createTranslationAccessor(getTranslation('en'));
+const defaultTranslation = createTranslationAccessor(getTranslation('en'), 'en');
 
 const LanguageContext = createContext<LanguageContextType>({
   language: 'en',
@@ -61,7 +64,7 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
-  const t = useMemo(() => createTranslationAccessor(getTranslation(language)), [language]);
+  const t = useMemo(() => createTranslationAccessor(getTranslation(language), language), [language]);
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>

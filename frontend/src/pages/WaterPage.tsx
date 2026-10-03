@@ -54,8 +54,8 @@ export default function WaterPage() {
     setTimeout(() => {
       setSimulationState('completed');
       addAlert({
-        title: '🚨 Potential Downstream Water Risk',
-        message: 'Upstream water release detected. Your registered farm is inside the monitored downstream region. Risk: MODERATE',
+        title: `🚨 ${t('Potential Downstream Water Risk')}`,
+        message: t('Upstream water release detected. Your registered farm is inside the monitored downstream region. Risk: MODERATE'),
         type: 'water',
         severity: 'warning'
       });
@@ -73,13 +73,13 @@ export default function WaterPage() {
         <div className="p-4 bg-[#2E7D32] text-white">
           <h2 className="text-xl font-bold flex items-center gap-2">
             <Waves className="w-6 h-6" />
-            Water Intelligence
+            {t.waterIntelligence}
           </h2>
-          <p className="text-sm opacity-90 mt-1">Real-time hydrological monitoring</p>
+          <p className="text-sm opacity-90 mt-1">{t('Real-time hydrological monitoring')}</p>
         </div>
 
         <div className="flex border-b">
-          {['overview', 'dams', 'rivers', 'wells'].map((tab) => (
+              {['overview', 'dams', 'rivers', 'wells'].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -87,7 +87,7 @@ export default function WaterPage() {
                 activeTab === tab ? 'text-[#2E7D32] border-b-2 border-[#2E7D32]' : 'text-gray-500 hover:text-gray-700'
               }`}
             >
-              {tab}
+              {t(tab)}
             </button>
           ))}
         </div>
@@ -104,12 +104,12 @@ export default function WaterPage() {
                   )}
                   <div>
                     <h3 className="font-semibold text-gray-900">
-                      {simulationState === 'completed' ? 'Moderate Water Risk' : 'Normal Conditions'}
+                      {simulationState === 'completed' ? t('Moderate Water Risk') : t('Normal Conditions')}
                     </h3>
                     <p className="text-sm text-gray-600 mt-1">
                       {simulationState === 'completed' 
-                        ? 'Your farm is in a potential downstream exposure zone due to upstream dam release.'
-                        : 'No immediate water risks detected for your registered farm area.'}
+                        ? t('Your farm is in a potential downstream exposure zone due to upstream dam release.')
+                        : t('No immediate water risks detected for your registered farm area.')}
                     </p>
                   </div>
                 </div>
@@ -119,26 +119,26 @@ export default function WaterPage() {
                 <div className="card border-l-4 border-orange-500 p-4 bg-white shadow-sm rounded-lg">
                   <h4 className="font-semibold text-gray-900 flex items-center gap-2 mb-2">
                     <Info className="w-4 h-4 text-orange-500" />
-                    Water Recommendations
+                    {t.waterRecommendations}
                   </h4>
                   <ul className="text-sm text-gray-600 space-y-2 list-disc pl-4">
-                    <li>Monitor official water updates closely</li>
-                    <li>Move equipment and livestock from low-lying areas</li>
-                    <li>Check field drainage systems</li>
-                    <li>Avoid entering potentially flooded areas</li>
+                    <li>{t('Monitor official water updates closely')}</li>
+                    <li>{t('Move equipment and livestock from low-lying areas')}</li>
+                    <li>{t('Check field drainage systems')}</li>
+                    <li>{t('Avoid entering potentially flooded areas')}</li>
                   </ul>
                 </div>
               )}
 
               <div className="mt-8">
-                <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Simulation</h3>
+                <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">{t('Simulation')}</h3>
                 {simulationState === 'normal' ? (
                   <button 
                     onClick={handleSimulate}
                     className="w-full btn-primary py-3 rounded-lg flex items-center justify-center gap-2 bg-[#D32F2F] hover:bg-red-800 text-white font-medium shadow-md transition-all"
                   >
                     <Activity className="w-5 h-5" />
-                    Simulate Dam Release
+                    {t.simulateDamRelease}
                   </button>
                 ) : (
                   <button 
@@ -146,13 +146,13 @@ export default function WaterPage() {
                     className="w-full py-3 rounded-lg flex items-center justify-center gap-2 border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium transition-all"
                   >
                     <RefreshCw className="w-5 h-5" />
-                    Reset Simulation
+                    {t('Reset Simulation')}
                   </button>
                 )}
                 
                 {simulationState !== 'normal' && simulationState !== 'completed' && (
                   <div className="mt-4 space-y-2">
-                    <div className="text-xs font-medium text-gray-500">SIMULATION IN PROGRESS...</div>
+                    <div className="text-xs font-medium text-gray-500">{t('SIMULATION IN PROGRESS...')}</div>
                     <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                       <div 
                         className="h-full bg-orange-500 transition-all duration-500" 
@@ -174,18 +174,18 @@ export default function WaterPage() {
               {DAMS.map(dam => (
                 <div key={dam.id} className="p-3 border rounded-lg bg-white shadow-sm flex flex-col gap-2">
                   <div className="flex justify-between items-start">
-                    <div className="font-medium text-gray-900">{dam.name}</div>
+                    <div className="font-medium text-gray-900">{t(dam.name)}</div>
                     <span className={`text-xs px-2 py-1 rounded-full ${
                       simulationState !== 'normal' && dam.id === 'sriram' 
                       ? 'bg-orange-100 text-orange-700' 
                       : 'bg-green-100 text-green-700'
                     }`}>
-                      {simulationState !== 'normal' && dam.id === 'sriram' ? 'Release Detected' : dam.condition}
+                      {simulationState !== 'normal' && dam.id === 'sriram' ? t.releaseDetected : t(dam.condition)}
                     </span>
                   </div>
                   <div className="text-xs text-gray-500 flex justify-between">
-                    <span>River: {dam.river}</span>
-                    <span>Reservoir: {dam.status}%</span>
+                    <span>{t('River:')} {t(`${dam.river} River`)}</span>
+                    <span>{t('Reservoir:')} {dam.status}%</span>
                   </div>
                 </div>
               ))}
@@ -195,10 +195,10 @@ export default function WaterPage() {
           {activeTab === 'rivers' && (
             <div className="space-y-3">
               <div className="p-3 border rounded-lg bg-white shadow-sm">
-                <div className="font-medium text-gray-900">Godavari River</div>
-                <div className="text-sm text-gray-500 mt-1">Distance from farm: ~45 km</div>
+                <div className="font-medium text-gray-900">{t('Godavari River')}</div>
+                <div className="text-sm text-gray-500 mt-1">{t('Distance from farm: ~45 km')}</div>
                 <div className={`text-xs mt-2 font-medium ${simulationState === 'normal' ? 'text-blue-600' : 'text-orange-600'}`}>
-                  Status: {simulationState === 'normal' ? 'Normal Flow' : 'Increased Flow Detected'}
+                  {t('Status:')} {simulationState === 'normal' ? t('Normal Flow') : t('Increased Flow Detected')}
                 </div>
               </div>
             </div>
@@ -209,11 +209,11 @@ export default function WaterPage() {
               {WELLS.map((well, idx) => (
                 <div key={well.id} className="p-3 border rounded-lg bg-white shadow-sm flex justify-between items-center">
                   <div>
-                    <div className="font-medium text-gray-900">Borewell {idx + 1}</div>
-                    <div className="text-xs text-gray-500">Distance: {well.distance}</div>
+                    <div className="font-medium text-gray-900">{t('Borewell ')}{idx + 1}</div>
+                    <div className="text-xs text-gray-500">{t('Distance:')} {well.distance}</div>
                   </div>
                   <span className={`text-xs px-2 py-1 rounded-full ${well.status === 'active' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-700'}`}>
-                    {well.status === 'active' ? 'Active' : 'Low'}
+                    {well.status === 'active' ? t('Active') : t.low}
                   </span>
                 </div>
               ))}
@@ -233,9 +233,9 @@ export default function WaterPage() {
           {/* Farm Marker */}
           <Marker position={[farmLat, farmLng]} icon={createIcon('#2E7D32', '🌾')}>
             <Popup>
-              <div className="font-bold text-gray-900">{farmer?.name || 'Your Farm'}</div>
-              <div className="text-sm text-gray-600">{farmer?.farmDetails.primaryCrop || 'Mixed Crops'}</div>
-              <div className="text-xs text-gray-500 mt-1">{farmer?.farmDetails.area ? `${farmer.farmDetails.area} acres` : 'Area not specified'}</div>
+              <div className="font-bold text-gray-900">{farmer?.name || t('Your Farm')}</div>
+              <div className="text-sm text-gray-600">{t(farmer?.farmDetails.primaryCrop || 'Mixed Crops')}</div>
+              <div className="text-xs text-gray-500 mt-1">{farmer?.farmDetails.area ? `${farmer.farmDetails.area} ${t.acres}` : t('Area not specified')}</div>
             </Popup>
           </Marker>
 
@@ -252,8 +252,8 @@ export default function WaterPage() {
           {DAMS.map(dam => (
             <Marker key={dam.id} position={[dam.lat, dam.lng]} icon={createIcon(simulationState !== 'normal' && dam.id === 'sriram' ? '#F57C00' : '#1976D2', '壩')}>
               <Popup>
-                <div className="font-bold">{dam.name}</div>
-                <div className="text-sm">Reservoir: {dam.status}%</div>
+                <div className="font-bold">{t(dam.name)}</div>
+                <div className="text-sm">{t('Reservoir:')} {dam.status}%</div>
                 <div className={`text-sm font-semibold mt-1 ${simulationState !== 'normal' && dam.id === 'sriram' ? 'text-orange-600' : 'text-green-600'}`}>
                   {simulationState !== 'normal' && dam.id === 'sriram' ? 'Release Detected ⚠️' : dam.condition}
                 </div>
@@ -264,7 +264,7 @@ export default function WaterPage() {
           {/* Reservoir Markers */}
           {RESERVOIRS.map(res => (
             <Marker key={res.id} position={[res.lat, res.lng]} icon={createIcon('#00BCD4', '💧')}>
-              <Popup>{res.name}</Popup>
+              <Popup>{t(res.name)}</Popup>
             </Marker>
           ))}
 
@@ -288,7 +288,7 @@ export default function WaterPage() {
               opacity: 0.8 
             }} 
           >
-            <Popup>Godavari River</Popup>
+            <Popup>{t('Godavari River')}</Popup>
           </Polyline>
 
           {/* Downstream Risk Zone */}

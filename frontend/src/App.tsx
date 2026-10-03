@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import LoadingState from './components/common/LoadingState';
 import { useFarmer } from './hooks/useFarmer';
+import { useLanguage } from './hooks/useLanguage';
 
 const DashboardPage = lazy(() => import('./pages/DashboardPage'));
 const MandiPage = lazy(() => import('./pages/MandiPage'));
@@ -23,9 +24,10 @@ const OnboardingPage = lazy(() => import('./pages/OnboardingPage'));
 
 const App: React.FC = () => {
   const { farmer } = useFarmer();
+  const { t } = useLanguage();
 
   return (
-    <Suspense fallback={<LoadingState message="Loading Krishi Mithra..." />}>
+    <Suspense fallback={<LoadingState message={t('Loading Krishi Mithra...')} />}>
       <Routes>
         <Route path="/onboarding" element={<OnboardingPage />} />
 

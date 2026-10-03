@@ -3,6 +3,7 @@ import { useLanguage } from '../hooks/useLanguage';
 import { useFarmer } from '../hooks/useFarmer';
 import { useAlerts } from '../hooks/useAlerts';
 import { Send, Mic, MapPin, TestTube, Sprout } from 'lucide-react';
+import { teUiTranslations } from '../i18n/te';
 
 interface Message {
   id: string;
@@ -28,28 +29,35 @@ const SUGGESTED_QUESTIONS = [
 
 // Mock Bhumi Service for offline fallback
 const bhumiService = {
-  async chat(message: string, context: BhumiContext) {
+  async chat(message: string, context: BhumiContext, language: string) {
     const msg = message.toLowerCase();
+    const telugu = language === 'te';
     
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    if (msg.includes('disease') || msg.includes('crop') || msg.includes('wrong')) {
+    if (msg.includes('disease') || msg.includes('crop') || msg.includes('wrong') || msg.includes('పంట') || msg.includes('వ్యాధి')) {
+      if (telugu) return teUiTranslations['Crop health answer'];
       return `Based on your farm in ${context.location}, there is a possible leaf blast detected in Zone B7 with 91% AI confidence. Heavy rainfall is expected in the next 48 hours. I recommend inspecting the affected zone before the rain arrives and ensuring proper drainage.`;
     }
-    if (msg.includes('rain') || msg.includes('weather')) {
+    if (msg.includes('rain') || msg.includes('weather') || msg.includes('వర్షం') || msg.includes('వాతావరణం')) {
+      if (telugu) return teUiTranslations['Weather forecast answer'];
       return `For your area in ${context.location}, heavy rainfall (up to 45mm) is expected starting tomorrow evening. Since you are growing ${context.crops.join(', ')}, make sure to check field drainage today to prevent waterlogging.`;
     }
-    if (msg.includes('price') || msg.includes('market') || msg.includes('mandi')) {
+    if (msg.includes('price') || msg.includes('market') || msg.includes('mandi') || msg.includes('ధర') || msg.includes('మార్కెట్') || msg.includes('మండి')) {
+      if (telugu) return teUiTranslations['Market answer'];
       return `Today at the nearest mandi in ${context.location}, ${context.crops[0] || 'your crop'} is trading at ₹2,450/quintal, which is ₹50 higher than yesterday. Demand is steady.`;
     }
-    if (msg.includes('scheme') || msg.includes('apply')) {
+    if (msg.includes('scheme') || msg.includes('apply') || msg.includes('పథకం') || msg.includes('దరఖాస్తు')) {
+      if (telugu) return teUiTranslations['Schemes answer'];
       return `Based on your profile (${context.farmArea} acres, ${context.irrigation}), you are eligible for the PM-KISAN scheme and the State Micro-Irrigation Subsidy. Would you like me to guide you on how to apply?`;
     }
-    if (msg.includes('water') || msg.includes('flood') || msg.includes('dam')) {
+    if (msg.includes('water') || msg.includes('flood') || msg.includes('dam') || msg.includes('నీరు') || msg.includes('వరద') || msg.includes('ఆనకట్ట')) {
+      if (telugu) return teUiTranslations['Water risk answer'];
       return `Your farm is currently in a MODERATE risk zone due to upstream water release from the Sriram Sagar Dam. I recommend moving any loose equipment from low-lying areas and monitoring official updates.`;
     }
 
+    if (telugu) return teUiTranslations['Default Bhumi answer'];
     return `I am Bhumi, your AI farming companion. I've noted that you grow ${context.crops.join(', ')} in ${context.location}. How can I assist you with your farming decisions today?`;
   }
 };
@@ -87,10 +95,10 @@ export default function BhumiPage() {
     try {
       const response = await bhumiService.chat(text, {
         location: farmer?.location.address || 'Warangal',
-        crops: farmer ? [farmer.farmDetails.primaryCrop] : ['Rice'],
+        crops: farmer ? [t(farmer.farmDetails.primaryCrop)] : [t('Rice')],
         farmArea: farmer?.farmDetails.area || 5,
         irrigation: farmer?.farmDetails.irrigationType || 'Borewell'
-      });
+      }, language);
 
       const bhumiMsg: Message = {
         id: (Date.now() + 1).toString(),
@@ -112,9 +120,9 @@ export default function BhumiPage() {
       {/* Header */}
       <div className="bg-white shadow-sm border-b px-6 py-4 flex flex-col items-center justify-center relative z-10">
         <h1 className="text-2xl font-bold text-[#2E7D32] flex items-center gap-2">
-          <span className="text-3xl">🤖</span> Bhumi AI
+          <span className="text-3xl">🤖</span> {t.bhumiTitle}
         </h1>
-        <p className="text-gray-500 text-sm mt-1">Your advanced farming companion</p>
+        <p className="text-gray-500 text-sm mt-1">{t('Your advanced farming companion')}</p>
         
         {/* Context Pills */}
         <div className="flex gap-2 mt-3 overflow-x-auto max-w-full pb-1 scrollbar-hide">
@@ -138,8 +146,8 @@ export default function BhumiPage() {
               🤖
             </div>
             <div>
-              <h2 className="text-xl font-bold text-gray-800">Namaste! I'm Bhumi.</h2>
-              <p className="text-gray-500 mt-2 max-w-sm">I can help you with weather forecasts, crop health, market prices, and farming advice.</p>
+              <h2 className="text-xl font-bold text-gray-800">{t("Namaste! I'm Bhumi.")}</h2>
+              <p className="text-gray-500 mt-2 max-w-sm">{t('I can help you with weather forecasts, crop health, market prices, and farming advice.')}</p>
             </div>
             
             <div className="flex flex-wrap justify-center gap-2 mt-8 w-full max-w-lg">
@@ -149,7 +157,7 @@ export default function BhumiPage() {
                   onClick={() => handleSend(q)}
                   className="bg-white border border-gray-200 hover:border-[#2E7D32] hover:text-[#2E7D32] text-gray-600 px-4 py-2 rounded-full text-sm transition-colors shadow-sm"
                 >
-                  {q}
+                  {t(q)}
                 </button>
               ))}
             </div>
@@ -209,7 +217,7 @@ export default function BhumiPage() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend(inputValue)}
-            placeholder="Ask Bhumi anything about your farm..."
+            placeholder={t('Ask Bhumi anything about your farm...')}
             className="flex-1 bg-gray-50 border border-gray-200 rounded-full px-5 py-3 focus:outline-none focus:ring-2 focus:ring-[#2E7D32] focus:border-transparent transition-shadow"
           />
           <button 
