@@ -5,7 +5,7 @@ import { demoAlerts } from '../data/demoData';
 export const alertService = {
   getAlerts: async (farmerId: string): Promise<Alert[]> => {
     try {
-      return await api.get<Alert[]>(`/alerts/${farmerId}`);
+      return await api.get<Alert[]>(`/alerts?farmer_id=${encodeURIComponent(farmerId)}`);
     } catch (error) {
       console.warn('Failed to fetch alerts, using demo data', error);
       return demoAlerts;
@@ -14,18 +14,18 @@ export const alertService = {
 
   markAsRead: async (alertIds: string[]): Promise<void> => {
     try {
-      await api.put(`/alerts/read`, { alertIds });
+      await Promise.all(alertIds.map(alertId => api.post(`/alerts/read`, { alertId })));
     } catch (error) {
       console.warn('Failed to mark alerts as read on server', error);
     }
   },
 
-  createAlert: async (alert: Omit<Alert, 'id'>): Promise<Alert> => {
+  createAlert: async (farmerId: string, alert: Omit<Alert, 'id' | 'date' | 'read'>): Promise<Alert> => {
     try {
-      return await api.post<Alert>(`/alerts`, alert);
+      return await api.post<Alert>(`/alerts`, { farmerId, ...alert });
     } catch (error) {
       console.warn('Failed to create alert on server', error);
-      return { ...alert, id: `a-${Date.now()}` } as Alert;
+      return { ...alert, id: `a-${Date.now()}`, date: new Date().toISOString(), read: false };
     }
   }
 };

@@ -108,7 +108,7 @@ export const demoCropHealth: CropHealthGrid = {
     const col = i % 4;
     const isProblemZone = i === 7; // Zone B7 (row 1, col 3) is index 7
     return {
-      id: `zone-${row}-${col}`,
+      id: `${String.fromCharCode(65 + row)}${i}`,
       row,
       col,
       healthScore: isProblemZone ? 45 : 85 + Math.random() * 10,

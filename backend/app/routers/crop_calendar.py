@@ -1,14 +1,15 @@
 from fastapi import APIRouter
-from typing import Optional
-from app.data.crop_calendar_data import CROP_CALENDAR
+
+from app.data.crop_calendar_data import SUPPORTED_CROPS, get_crop_calendar
 
 router = APIRouter(prefix="/crop-calendar", tags=["Crop Calendar"])
 
-@router.get("/")
-async def get_crop_calendar(crop: Optional[str] = None, season: Optional[str] = None, region: Optional[str] = None):
-    if not crop:
-        return CROP_CALENDAR
-    crop_data = CROP_CALENDAR.get(crop, {})
-    if season:
-        return {season: crop_data.get(season, {})}
-    return crop_data
+
+@router.get("")
+async def crop_calendar(crop: str = "Rice", season: str = "Kharif", region: str = "Telangana"):
+    return get_crop_calendar(crop, season, region)
+
+
+@router.get("/crops")
+async def list_crops():
+    return SUPPORTED_CROPS

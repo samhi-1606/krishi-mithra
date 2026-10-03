@@ -1,27 +1,43 @@
 import uuid
-from typing import List, Dict, Any
+from datetime import datetime, timezone
+from typing import Any, Dict, List, Optional
 
 # In-memory store for demo
-ALERTS_STORE = []
+ALERTS_STORE: List[Dict[str, Any]] = []
 
-def create_alert(farmer_id: str, category: str, message: str, priority: str) -> Dict[str, Any]:
+
+def create_alert(
+    farmer_id: str,
+    title: str,
+    message: str,
+    alert_type: str = "system",
+    severity: str = "info",
+    action_link: Optional[str] = None,
+) -> Dict[str, Any]:
     alert = {
         "id": str(uuid.uuid4()),
-        "farmer_id": farmer_id,
-        "category": category, # weather, disease, pest, market, water, schemes
+        "farmerId": farmer_id,
+        "title": title,
         "message": message,
-        "priority": priority,
-        "read": False
+        # weather, disease, water, market, system
+        "type": alert_type,
+        # info, warning, critical
+        "severity": severity,
+        "date": datetime.now(timezone.utc).isoformat(),
+        "read": False,
+        "actionLink": action_link,
     }
     ALERTS_STORE.append(alert)
     return alert
 
+
 def get_alerts(farmer_id: str) -> List[Dict[str, Any]]:
-    return [a for a in ALERTS_STORE if a["farmer_id"] == farmer_id]
+    return [a for a in ALERTS_STORE if a["farmerId"] == farmer_id]
+
 
 def mark_read(alert_id: str) -> bool:
-    for a in ALERTS_STORE:
-        if a["id"] == alert_id:
-            a["read"] = True
+    for alert in ALERTS_STORE:
+        if alert["id"] == alert_id:
+            alert["read"] = True
             return True
     return False

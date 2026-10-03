@@ -2,52 +2,55 @@ DEMO_FARMERS = [
     {
         "id": "f1",
         "name": "Ramesh Goud",
+        "phone": "+91 9876543210",
         "location": {
-            "state": "Telangana",
-            "district": "Warangal",
-            "mandal": "Hanamkonda",
-            "village": "Gopalpur",
-            "lat": 18.0,
-            "lon": 79.5
+            "lat": 17.9689,
+            "lon": 79.5941,
+            "address": "Warangal, Telangana",
+            "region": "Telangana",
         },
-        "crops": ["Rice"],
-        "farm_area": 3.5,
-        "soil_type": "Black",
-        "irrigation": "Borewell",
-        "preferred_language": "Telugu"
+        "farmDetails": {
+            "area": 3.5,
+            "primaryCrop": "Rice",
+            "soilType": "Black Cotton",
+            "irrigationType": "Borewell",
+        },
+        "preferredLanguage": "te",
     },
     {
         "id": "f2",
         "name": "Laxman Reddy",
+        "phone": "+91 9876543211",
         "location": {
-            "state": "Telangana",
-            "district": "Karimnagar",
-            "mandal": "Karimnagar",
-            "village": "Bommakal",
-            "lat": 18.4,
-            "lon": 79.1
+            "lat": 18.4386,
+            "lon": 79.1288,
+            "address": "Karimnagar, Telangana",
+            "region": "Telangana",
         },
-        "crops": ["Rice", "Cotton"],
-        "farm_area": 5.0,
-        "soil_type": "Red",
-        "irrigation": "Canal",
-        "preferred_language": "Telugu"
+        "farmDetails": {
+            "area": 5.0,
+            "primaryCrop": "Cotton",
+            "soilType": "Red Soil",
+            "irrigationType": "Canal",
+        },
+        "preferredLanguage": "te",
     },
     {
         "id": "f3",
         "name": "Rajesh Sharma",
+        "phone": "+91 9876543212",
         "location": {
-            "state": "Andhra Pradesh",
-            "district": "Guntur",
-            "mandal": "Tadikonda",
-            "village": "Nidamarru",
-            "lat": 16.3,
-            "lon": 80.4
+            "lat": 16.3067,
+            "lon": 80.4365,
+            "address": "Guntur, Andhra Pradesh",
+            "region": "Andhra Pradesh",
         },
-        "crops": ["Chilli", "Tomato"],
-        "farm_area": 4.0,
-        "soil_type": "Black",
-        "irrigation": "Drip",
-        "preferred_language": "Telugu"
-    }
+        "farmDetails": {
+            "area": 4.0,
+            "primaryCrop": "Chilli",
+            "soilType": "Loamy",
+            "irrigationType": "Drip",
+        },
+        "preferredLanguage": "hi",
+    },
 ]

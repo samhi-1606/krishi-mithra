@@ -1,21 +1,102 @@
-WATER_DATA = {
-    "dams": [
-        {"name": "Sriram Sagar Dam", "lat": 18.9, "lon": 78.3, "status": "Normal", "capacity": "80%", "risk_level": "Low"},
-        {"name": "Nagarjuna Sagar", "lat": 16.5, "lon": 79.3, "status": "Releasing", "capacity": "95%", "risk_level": "High"},
-        {"name": "Singur Dam", "lat": 17.7, "lon": 77.9, "status": "Normal", "capacity": "60%", "risk_level": "Low"}
-    ],
-    "rivers": [
-        {"name": "Godavari", "status": "Normal", "risk_level": "Low"},
-        {"name": "Krishna", "status": "High Flow", "risk_level": "Medium"},
-        {"name": "Musi", "status": "Normal", "risk_level": "Low"}
-    ],
-    "reservoirs": [
-        {"name": "Kadem", "status": "Normal", "capacity": "75%", "risk_level": "Low"},
-        {"name": "Nizamsagar", "status": "Normal", "capacity": "70%", "risk_level": "Low"}
-    ],
-    "wells": [
-        {"name": "Warangal Borehole 1", "lat": 18.05, "lon": 79.55, "status": "Active", "depth": "120ft"},
-        {"name": "Warangal Borehole 2", "lat": 18.10, "lon": 79.50, "status": "Depleted", "depth": "200ft"},
-        {"name": "Warangal Borehole 3", "lat": 17.95, "lon": 79.60, "status": "Active", "depth": "150ft"}
-    ]
-}
+WATER_BODIES = [
+    {
+        "id": "wb1",
+        "name": "Sriram Sagar Dam",
+        "type": "dam",
+        "lat": 18.9,
+        "lon": 78.3,
+        "currentLevel": 80,
+        "capacity": 100,
+        "status": "normal",
+    },
+    {
+        "id": "wb2",
+        "name": "Nagarjuna Sagar",
+        "type": "dam",
+        "lat": 16.5,
+        "lon": 79.3,
+        "currentLevel": 95,
+        "capacity": 100,
+        "status": "releasing",
+    },
+    {
+        "id": "wb3",
+        "name": "Singur Dam",
+        "type": "dam",
+        "lat": 17.7,
+        "lon": 77.9,
+        "currentLevel": 60,
+        "capacity": 100,
+        "status": "normal",
+    },
+    {
+        "id": "wb4",
+        "name": "Godavari River",
+        "type": "river",
+        "lat": 18.5,
+        "lon": 79.0,
+        "currentLevel": 55,
+        "capacity": 100,
+        "status": "normal",
+    },
+    {
+        "id": "wb5",
+        "name": "Krishna River",
+        "type": "river",
+        "lat": 16.6,
+        "lon": 79.9,
+        "currentLevel": 78,
+        "capacity": 100,
+        "status": "normal",
+    },
+    {
+        "id": "wb6",
+        "name": "Kadem Reservoir",
+        "type": "reservoir",
+        "lat": 19.08,
+        "lon": 78.26,
+        "currentLevel": 75,
+        "capacity": 100,
+        "status": "normal",
+    },
+    {
+        "id": "wb7",
+        "name": "Nizamsagar",
+        "type": "reservoir",
+        "lat": 18.17,
+        "lon": 77.85,
+        "currentLevel": 70,
+        "capacity": 100,
+        "status": "normal",
+    },
+    {
+        "id": "wb8",
+        "name": "Warangal Borehole 1",
+        "type": "well",
+        "lat": 18.05,
+        "lon": 79.55,
+        "currentLevel": 60,
+        "capacity": 100,
+        "status": "normal",
+    },
+    {
+        "id": "wb9",
+        "name": "Warangal Borehole 2",
+        "type": "well",
+        "lat": 18.10,
+        "lon": 79.50,
+        "currentLevel": 15,
+        "capacity": 100,
+        "status": "low",
+    },
+    {
+        "id": "wb10",
+        "name": "Warangal Borehole 3",
+        "type": "well",
+        "lat": 17.95,
+        "lon": 79.60,
+        "currentLevel": 45,
+        "capacity": 100,
+        "status": "normal",
+    },
+]

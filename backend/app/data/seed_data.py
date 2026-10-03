@@ -1,14 +1,62 @@
 SEED_DATA = {
     "Rice": [
-        {"variety": "BPT 5204", "region": "Telangana", "duration": "145 days", "yield": "50-60 Q/ha"},
-        {"variety": "MTU 1010", "region": "Telangana", "duration": "120 days", "yield": "55-65 Q/ha"}
+        {
+            "id": "sv-rice-1",
+            "name": "BPT 5204 (Samba Mahsuri)",
+            "crop": "Rice",
+            "duration": 145,
+            "yieldPotential": "High",
+            "resistance": ["Bacterial Leaf Blight"],
+            "pricePerKg": 45,
+        },
+        {
+            "id": "sv-rice-2",
+            "name": "MTU 1010 (Cottondora Sannalu)",
+            "crop": "Rice",
+            "duration": 120,
+            "yieldPotential": "Medium",
+            "resistance": ["Brown Plant Hopper"],
+            "pricePerKg": 38,
+        },
     ],
     "Cotton": [
-        {"variety": "RCH 659", "region": "Telangana", "duration": "160 days", "yield": "25-30 Q/ha"},
-        {"variety": "Mallika", "region": "Andhra Pradesh", "duration": "150 days", "yield": "20-25 Q/ha"}
+        {
+            "id": "sv-cotton-1",
+            "name": "RCH 659",
+            "crop": "Cotton",
+            "duration": 160,
+            "yieldPotential": "High",
+            "resistance": ["Bollworm"],
+            "pricePerKg": 730,
+        },
+        {
+            "id": "sv-cotton-2",
+            "name": "Mallika",
+            "crop": "Cotton",
+            "duration": 150,
+            "yieldPotential": "Medium",
+            "resistance": ["Leaf Curl Virus"],
+            "pricePerKg": 680,
+        },
     ],
     "Chilli": [
-        {"variety": "Teja", "region": "Telangana", "duration": "180 days", "yield": "40-50 Q/ha"},
-        {"variety": "Byadagi", "region": "Karnataka", "duration": "170 days", "yield": "30-40 Q/ha"}
-    ]
+        {
+            "id": "sv-chilli-1",
+            "name": "Teja",
+            "crop": "Chilli",
+            "duration": 180,
+            "yieldPotential": "High",
+            "resistance": ["Thrips"],
+            "pricePerKg": 1200,
+        },
+        {
+            "id": "sv-chilli-2",
+            "name": "Byadagi",
+            "crop": "Chilli",
+            "duration": 170,
+            "yieldPotential": "Medium",
+            "resistance": ["Powdery Mildew"],
+            "pricePerKg": 1050,
+        },
+    ],
 }

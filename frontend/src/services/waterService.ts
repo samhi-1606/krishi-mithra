@@ -14,7 +14,7 @@ export const waterService = {
 
   getWaterRisk: async (farmId: string): Promise<WaterRisk> => {
     try {
-      return await api.get<WaterRisk>(`/water/risk/${farmId}`);
+      return await api.get<WaterRisk>(`/water/risk?farm_id=${encodeURIComponent(farmId)}`);
     } catch (error) {
       console.warn('Failed to get water risk, using demo data', error);
       return {
@@ -29,7 +29,7 @@ export const waterService = {
 
   simulateDamRelease: async (damId: string): Promise<SimulationResult> => {
     try {
-      return await api.post<SimulationResult>(`/water/simulate`, { damId });
+      return await api.post<SimulationResult>(`/water/simulate-release?dam_id=${encodeURIComponent(damId)}`, {});
     } catch (error) {
       console.warn('Failed to simulate dam release, using demo data', error);
       return {

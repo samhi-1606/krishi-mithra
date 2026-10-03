@@ -26,7 +26,7 @@ export const cropHealthService = {
       return await api.get<ZoneDetail>(`/crop-health/zone/${zoneId}`);
     } catch (error) {
       console.warn('Failed to get zone detail, using demo data', error);
-      const isProblemZone = zoneId.includes('1-3');
+      const isProblemZone = zoneId === 'B7';
       return {
         zoneId,
         healthScore: isProblemZone ? 45 : 92,

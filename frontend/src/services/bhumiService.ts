@@ -7,8 +7,8 @@ export const bhumiService = {
     try {
       return await api.post<ChatResponse>(`/bhumi/chat`, { 
         message, 
-        farmerId: farmerContext?.id,
-        language: preferredLanguage 
+        farmerContext,
+        preferredLanguage
       });
     } catch (error) {
       console.warn('Failed to reach Bhumi API, using fallback engine', error);
@@ -22,7 +22,7 @@ export const bhumiService = {
     try {
       return await api.get<ChatMessage[]>(`/bhumi/history/${farmerId}`);
     } catch (error) {
-      console.warn('Failed to fetch chat history, returning empty', error);
+      console.warn('Failed to fetch chat history, returning greeting', error);
       return [
         {
           id: 'msg-1',

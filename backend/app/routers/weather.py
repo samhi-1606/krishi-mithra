@@ -3,7 +3,7 @@ from app.services.weather_service import get_weather, generate_weather_alerts
 
 router = APIRouter(prefix="/weather", tags=["Weather"])
 
-@router.get("/")
+@router.get("")
 async def weather(lat: float, lon: float):
     return await get_weather(lat, lon)
 
